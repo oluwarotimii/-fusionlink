@@ -78,12 +78,6 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
           <h1 className="text-2xl font-bold text-slate-900">Fusionlink Solutions Academy</h1>
           <div className="flex gap-2 flex-wrap justify-center">
-            <Link href="/register">
-              <Button variant="outline">Register</Button>
-            </Link>
-            <Link href="/admin/login">
-              <Button className="bg-slate-900 hover:bg-slate-800 text-white">Admin</Button>
-            </Link>
           </div>
         </div>
       </div>

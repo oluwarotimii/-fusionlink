@@ -1,15 +1,22 @@
-"use client"
-
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
 import Link from "next/link"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, Plus } from "lucide-react"
 import { useRouter } from "next/navigation"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 
 export default function NewCoursePage() {
   const [loading, setLoading] = useState(false)
@@ -31,47 +38,60 @@ export default function NewCoursePage() {
     language: "English",
   })
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({
-      ...prev,
-      [name]: [
-        "price",
-        "original_price",
-        "discount_percentage",
-        "duration_hours",
-        "total_lectures",
-      ].includes(name)
-        ? value === "" ? "" : Number.parseFloat(value)
-        : value,
-    }))
-  }
+  const [categories, setCategories] = useState<{ id: number; name: string }[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState("");
+  const [categoryError, setCategoryError] = useState("");
+  const [addingCategory, setAddingCategory] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError("")
-    setLoading(true)
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
+  const fetchCategories = async () => {
     try {
-      const response = await fetch("/api/courses", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, image_url: null }), // Set image_url to null as it's no longer used
-      })
-
+      const response = await fetch("/api/admin/categories");
       if (response.ok) {
-        router.push("/admin/courses")
+        const data = await response.json();
+        setCategories(data);
+        if (data.length > 0 && !formData.category) {
+          setFormData((prev) => ({ ...prev, category: data[0].name }));
+        }
       } else {
-        const data = await response.json()
-        setError(data.error || "Failed to create course")
+        console.error("Failed to fetch categories");
       }
     } catch (err) {
-      setError("An error occurred. Please try again.")
-      console.error("[v0] Error creating course:", err)
-    } finally {
-      setLoading(false)
+      console.error("Error fetching categories:", err);
     }
-  }
+  };
+
+  const handleAddCategory = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setCategoryError("");
+    setAddingCategory(true);
+    try {
+      const response = await fetch("/api/admin/categories", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: newCategoryName }),
+      });
+      if (response.ok) {
+        const newCategory = await response.json();
+        setCategories((prev) => [...prev, newCategory]);
+        setFormData((prev) => ({ ...prev, category: newCategory.name }));
+        setNewCategoryName("");
+        setIsModalOpen(false);
+      } else {
+        const data = await response.json();
+        setCategoryError(data.error || "Failed to add category");
+      }
+    } catch (err) {
+      setCategoryError("An error occurred. Please try again.");
+      console.error("Error adding category:", err);
+    } finally {
+      setAddingCategory(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -186,18 +206,54 @@ export default function NewCoursePage() {
             {/* Course Details */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Category</label>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-sm font-medium text-slate-700">Category</label>
+                  <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" size="icon" className="h-7 w-7">
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[425px]">
+                      <DialogHeader>
+                        <DialogTitle>Add New Category</DialogTitle>
+                        <DialogDescription>
+                          Enter the name of the new category you want to add.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="grid gap-4 py-4">
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <label htmlFor="categoryName" className="text-right">
+                            Name
+                          </label>
+                          <Input
+                            id="categoryName"
+                            value={newCategoryName}
+                            onChange={(e) => setNewCategoryName(e.target.value)}
+                            className="col-span-3"
+                          />
+                        </div>
+                        {categoryError && <p className="text-red-500 text-sm">{categoryError}</p>}
+                      </div>
+                      <DialogFooter>
+                        <Button type="submit" onClick={handleAddCategory} disabled={addingCategory}>
+                          {addingCategory ? "Adding..." : "Add Category"}
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                </div>
                 <select
                   name="category"
                   value={formData.category}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
                 >
-                  <option>Development</option>
-                  <option>Design</option>
-                  <option>Mobile</option>
-                  <option>Business</option>
-                  <option>Marketing</option>
+                  {categories.map((cat) => (
+                    <option key={cat.id} value={cat.name}>
+                      {cat.name}
+                    </option>
+                  ))}
                 </select>
               </div>
 
@@ -250,7 +306,7 @@ export default function NewCoursePage() {
             <div className="flex gap-4 pt-6 border-t">
               <Button
                 type="submit"
-                className="flex-1 bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3"
+                className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3"
                 disabled={loading}
               >
                 {loading ? "Creating..." : "Create Course"}
