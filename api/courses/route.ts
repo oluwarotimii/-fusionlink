@@ -10,10 +10,13 @@ export async function GET() {
     )
     console.log("[v0] Courses fetched successfully:", courses.length)
 
-    const coursesWithNumericPrice = courses.map((course) => ({
-      ...course,
-      price: parseFloat(course.price as string),
-    }))
+    const coursesWithNumericPrice = courses.map((course) => {
+      const price = typeof course.price === "string" ? parseFloat(course.price) : 0
+      return {
+        ...course,
+        price: isNaN(price) ? 0 : price,
+      }
+    })
 
     const response = Response.json(coursesWithNumericPrice)
     response.headers.set("Content-Type", "application/json")

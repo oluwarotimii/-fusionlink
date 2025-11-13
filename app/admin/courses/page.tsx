@@ -35,7 +35,6 @@ export default function CoursesManager() {
       const response = await fetch("/api/courses")
       if (response.ok) {
         const data = await response.json()
-        console.log("[v0] Fetched courses data:", data)
         setCourses(data)
         setFilteredCourses(data)
       }
@@ -139,7 +138,9 @@ export default function CoursesManager() {
                     <td className="px-6 py-4 text-sm text-slate-900 font-medium">{course.title}</td>
                     <td className="px-6 py-4 text-sm text-slate-600">{course.instructor_name}</td>
                     <td className="px-6 py-4 text-sm text-slate-600">{course.category}</td>
-                    <td className="px-6 py-4 text-sm font-semibold text-slate-900">${course.price.toFixed(2)}</td>
+                    <td className="px-6 py-4 text-sm font-semibold text-slate-900">
+                      ${course.price ? Number(course.price).toFixed(2) : "0.00"}
+                    </td>
                     <td className="px-6 py-4">
                       <span
                         className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
