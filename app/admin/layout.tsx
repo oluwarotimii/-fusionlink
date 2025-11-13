@@ -5,19 +5,13 @@ import { LayoutDashboard, BookOpen, Users, Settings } from "lucide-react"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const cookieStore = cookies()
-  let authToken = null;
-  for (const cookie of cookieStore.getAll()) {
-    if (cookie.name === "auth_token") {
-      authToken = cookie.value;
-      break;
-    }
-  }
+  const cookieStore = await cookies()
+  const authToken = cookieStore.get("auth_token")?.value
 
   if (!authToken) {
     redirect("/admin/login")
