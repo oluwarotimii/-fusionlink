@@ -261,7 +261,6 @@ export default function EditCoursePage() {
                   onChange={handleChange}
                 />
               </div>
-            </div>
 
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">Video URL</label>
