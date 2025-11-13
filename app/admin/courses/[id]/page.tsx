@@ -58,6 +58,24 @@ export default function EditCoursePage() {
   const [categoryError, setCategoryError] = useState("");
   const [addingCategory, setAddingCategory] = useState(false);
 
+  const fetchCourse = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`/api/courses/${courseId}`);
+      if (response.ok) {
+        const data = await response.json();
+        setFormData(data);
+      } else {
+        setError("Failed to fetch course details.");
+      }
+    } catch (err) {
+      console.error("Error fetching course details:", err);
+      setError("An error occurred while fetching course details.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchCourse();
     fetchCategories();
