@@ -182,7 +182,7 @@ export default function EditCoursePage() {
 
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">Instructor Image URL</label>
-                <Input name="instructor_image_url" value={formData.instructor_image_url} onChange={handleChange} />
+                <Input name="instructor_image_url" value={formData.instructor_image_url} onChange={handleChange} disabled />
               </div>
             </div>
 

@@ -1,0 +1,136 @@
+"use client"
+
+import { useState, useEffect } from "react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Card } from "@/components/ui/card"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+
+interface BankDetails {
+  bank_name: string
+  account_number: string
+  transfer_instructions: string
+}
+
+export default function AdminSettingsPage() {
+  const [bankDetails, setBankDetails] = useState<BankDetails>({
+    bank_name: "",
+    account_number: "",
+    transfer_instructions: "",
+  })
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState("")
+  const [success, setSuccess] = useState("")
+
+  useEffect(() => {
+    fetchBankDetails()
+  }, [])
+
+  const fetchBankDetails = async () => {
+    try {
+      setLoading(true)
+      const response = await fetch("/api/admin/settings")
+      if (response.ok) {
+        const data = await response.json()
+        setBankDetails(data)
+      } else {
+        setError("Failed to fetch bank details.")
+      }
+    } catch (err) {
+      console.error("Error fetching bank details:", err)
+      setError("An error occurred while fetching bank details.")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setBankDetails((prev) => ({ ...prev, [name]: value }))
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setSaving(true)
+    setError("")
+    setSuccess("")
+
+    try {
+      const response = await fetch("/api/admin/settings", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(bankDetails),
+      })
+
+      if (response.ok) {
+        setSuccess("Bank details updated successfully!")
+      } else {
+        const data = await response.json()
+        setError(data.error || "Failed to update bank details.")
+      }
+    } catch (err) {
+      console.error("Error updating bank details:", err)
+      setError("An error occurred while updating bank details.")
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <p className="text-slate-600">Loading settings...</p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="max-w-2xl mx-auto">
+      <h1 className="text-3xl font-bold text-slate-900 mb-6">Bank Details Settings</h1>
+      <Card className="p-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {error && <div className="bg-red-100 text-red-700 p-4 rounded">{error}</div>}
+          {success && <div className="bg-green-100 text-green-700 p-4 rounded">{success}</div>}
+
+          <div>
+            <Label htmlFor="bank_name">Bank Name</Label>
+            <Input
+              id="bank_name"
+              name="bank_name"
+              value={bankDetails.bank_name}
+              onChange={handleChange}
+              placeholder="e.g., First Bank of Nigeria"
+            />
+          </div>
+          <div>
+            <Label htmlFor="account_number">Account Number</Label>
+            <Input
+              id="account_number"
+              name="account_number"
+              value={bankDetails.account_number}
+              onChange={handleChange}
+              placeholder="e.g., 1234567890"
+            />
+          </div>
+          <div>
+            <Label htmlFor="transfer_instructions">Transfer Instructions</Label>
+            <Textarea
+              id="transfer_instructions"
+              name="transfer_instructions"
+              value={bankDetails.transfer_instructions}
+              onChange={handleChange}
+              placeholder="e.g., Please include your course title in the transfer description."
+              rows={5}
+            />
+          </div>
+
+          <Button type="submit" disabled={saving} className="bg-yellow-500 hover:bg-yellow-600 text-white">
+            {saving ? "Saving..." : "Save Bank Details"}
+          </Button>
+        </form>
+      </Card>
+    </div>
+  )
+}

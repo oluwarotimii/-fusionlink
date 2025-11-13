@@ -137,6 +137,7 @@ export default function NewCoursePage() {
                   value={formData.instructor_image_url}
                   onChange={handleChange}
                   placeholder="Image URL"
+                  disabled
                 />
               </div>
             </div>

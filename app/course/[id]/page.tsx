@@ -36,8 +36,13 @@ export default function CourseDetail({ params: awaitedParams }: { params: Promis
   const [course, setCourse] = useState<Course | null>(null)
   const [reviews, setReviews] = useState<Review[]>([])
   const [loading, setLoading] = useState(true)
-  const [wishlist, setWishlist] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [showEnrollDetails, setShowEnrollDetails] = useState(false);
+  const [bankDetails, setBankDetails] = useState({
+    bank_name: "",
+    account_number: "",
+    transfer_instructions: "",
+  });
 
   useEffect(() => {
     const fetchCourseAndReviews = async () => {
@@ -66,14 +71,27 @@ export default function CourseDetail({ params: awaitedParams }: { params: Promis
           setReviews(reviewsData)
         }
       } catch (error) {
-        console.error("[v0] Error fetching data:", error)
+        console.error("Error fetching data:", error)
         setError("Server error. Please try again later.")
       } finally {
         setLoading(false)
       }
     }
 
-    fetchCourseAndReviews()
+    const fetchBankDetails = async () => {
+      try {
+        const response = await fetch("/api/admin/settings");
+        if (response.ok) {
+          const data = await response.json();
+          setBankDetails(data);
+        }
+      } catch (error) {
+        console.error("Error fetching bank details:", error);
+      }
+    };
+
+    fetchCourseAndReviews();
+    fetchBankDetails();
   }, [params.id])
 
   if (loading) {
@@ -237,9 +255,27 @@ export default function CourseDetail({ params: awaitedParams }: { params: Promis
                 )}
               </div>
 
-              <Button className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 mb-3">
+              <Button
+                className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 mb-3"
+                onClick={() => setShowEnrollDetails(!showEnrollDetails)}
+              >
                 Enroll Now
               </Button>
+
+              {showEnrollDetails && (
+                <Card className="p-4 mt-4 bg-slate-50">
+                  <h3 className="text-lg font-bold mb-2 text-slate-900">Account Details for Transfer</h3>
+                  <p className="text-sm text-slate-700 mb-1">
+                    <span className="font-semibold">Bank Name:</span> {bankDetails.bank_name || "N/A"}
+                  </p>
+                  <p className="text-sm text-slate-700 mb-3">
+                    <span className="font-semibold">Account Number:</span> {bankDetails.account_number || "N/A"}
+                  </p>
+                  <p className="text-sm text-slate-700 leading-relaxed">
+                    <span className="font-semibold">Instructions:</span> {bankDetails.transfer_instructions || "N/A"}
+                  </p>
+                </Card>
+              )}
 
               <Link href="/courses" className="w-full">
                 <Button variant="outline" className="w-full border-slate-300 bg-transparent">

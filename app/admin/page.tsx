@@ -88,7 +88,7 @@ export default function AdminDashboard() {
         {/* Quick Actions */}
         <Card className="p-6">
           <h2 className="text-2xl font-bold text-slate-900 mb-6">Quick Actions</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <Link href="/admin/courses">
               <Button className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3">
                 Manage Courses
@@ -97,6 +97,11 @@ export default function AdminDashboard() {
             <Link href="/admin/change-password">
               <Button className="w-full bg-blue-800 hover:bg-blue-900 text-white font-semibold py-3">
                 Change Password
+              </Button>
+            </Link>
+            <Link href="/admin/settings">
+              <Button className="w-full bg-blue-800 hover:bg-blue-900 text-white font-semibold py-3">
+                Bank Details Settings
               </Button>
             </Link>
           </div>
