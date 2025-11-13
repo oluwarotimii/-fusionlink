@@ -166,28 +166,28 @@ export default function CourseDetail({ params: awaitedParams }: { params: Promis
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
               <Card className="p-4 text-center">
                 <div className="flex justify-center mb-2">
-                  <BookOpen className="w-6 h-6 text-teal-500" />
+                  <BookOpen className="w-6 h-6 text-yellow-500" />
                 </div>
                 <p className="text-2xl font-bold text-slate-900">{course.total_sections}</p>
                 <p className="text-sm text-slate-600">Sections</p>
               </Card>
               <Card className="p-4 text-center">
                 <div className="flex justify-center mb-2">
-                  <Play className="w-6 h-6 text-teal-500" />
+                  <Play className="w-6 h-6 text-yellow-500" />
                 </div>
                 <p className="text-2xl font-bold text-slate-900">{course.total_lectures}</p>
                 <p className="text-sm text-slate-600">Lectures</p>
               </Card>
               <Card className="p-4 text-center">
                 <div className="flex justify-center mb-2">
-                  <Clock className="w-6 h-6 text-teal-500" />
+                  <Clock className="w-6 h-6 text-yellow-500" />
                 </div>
                 <p className="text-2xl font-bold text-slate-900">{course.duration_hours}h</p>
                 <p className="text-sm text-slate-600">Duration</p>
               </Card>
               <Card className="p-4 text-center">
                 <div className="flex justify-center mb-2">
-                  <Languages className="w-6 h-6 text-teal-500" />
+                  <Languages className="w-6 h-6 text-yellow-500" />
                 </div>
                 <p className="text-2xl font-bold text-slate-900">{course.language}</p>
                 <p className="text-sm text-slate-600">Language</p>
@@ -209,7 +209,7 @@ export default function CourseDetail({ params: awaitedParams }: { params: Promis
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
                           <h3 className="font-semibold text-slate-900">{review.reviewer_name}</h3>
-                          <span className="text-teal-600 font-semibold">{"★".repeat(review.rating)}</span>
+                          <span className="text-yellow-600 font-semibold">{"★".repeat(review.rating)}</span>
                         </div>
                         <p className="text-slate-700 mt-2">{review.comment}</p>
                       </div>
@@ -237,7 +237,7 @@ export default function CourseDetail({ params: awaitedParams }: { params: Promis
                 )}
               </div>
 
-              <Button className="w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3 mb-3">
+              <Button className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 mb-3">
                 Enroll Now
               </Button>
 

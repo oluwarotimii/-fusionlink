@@ -60,7 +60,7 @@ export default function AdminDashboard() {
                 <p className="text-slate-600 text-sm font-medium">Total Courses</p>
                 <p className="text-4xl font-bold text-slate-900 mt-2">{stats.courses}</p>
               </div>
-              <BookOpen className="w-12 h-12 text-teal-500 opacity-20" />
+              <BookOpen className="w-12 h-12 text-yellow-500 opacity-20" />
             </div>
           </Card>
 
@@ -70,7 +70,7 @@ export default function AdminDashboard() {
                 <p className="text-slate-600 text-sm font-medium">Total Users</p>
                 <p className="text-4xl font-bold text-slate-900 mt-2">{stats.users}</p>
               </div>
-              <Users className="w-12 h-12 text-blue-500 opacity-20" />
+              <Users className="w-12 h-12 text-blue-800 opacity-20" />
             </div>
           </Card>
 
@@ -80,7 +80,7 @@ export default function AdminDashboard() {
                 <p className="text-slate-600 text-sm font-medium">Total Enrollments</p>
                 <p className="text-4xl font-bold text-slate-900 mt-2">{stats.enrollments}</p>
               </div>
-              <BarChart3 className="w-12 h-12 text-purple-500 opacity-20" />
+              <BarChart3 className="w-12 h-12 text-blue-800 opacity-20" />
             </div>
           </Card>
         </div>
@@ -88,20 +88,15 @@ export default function AdminDashboard() {
         {/* Quick Actions */}
         <Card className="p-6">
           <h2 className="text-2xl font-bold text-slate-900 mb-6">Quick Actions</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Link href="/admin/courses">
-              <Button className="w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3">
+              <Button className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3">
                 Manage Courses
               </Button>
             </Link>
             <Link href="/admin/change-password">
-              <Button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3">
+              <Button className="w-full bg-blue-800 hover:bg-blue-900 text-white font-semibold py-3">
                 Change Password
-              </Button>
-            </Link>
-            <Link href="/admin/seed-data">
-              <Button className="w-full bg-purple-500 hover:bg-purple-600 text-white font-semibold py-3">
-                Seed Demo Data
               </Button>
             </Link>
           </div>

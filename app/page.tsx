@@ -6,7 +6,6 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
-import { ThemeToggle } from "@/components/theme-toggle"
 
 interface Course {
   id: number
@@ -77,7 +76,7 @@ export default function Home() {
       {/* Header Navigation */}
       <div className="bg-white border-b sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <h1 className="text-2xl font-bold text-slate-900">FSL Academy</h1>
+          <h1 className="text-2xl font-bold text-slate-900">Fusionlink Solutions Academy</h1>
           <div className="flex gap-2 flex-wrap justify-center">
             <Link href="/register">
               <Button variant="outline">Register</Button>
@@ -85,7 +84,6 @@ export default function Home() {
             <Link href="/admin/login">
               <Button className="bg-slate-900 hover:bg-slate-800 text-white">Admin</Button>
             </Link>
-            <ThemeToggle />
           </div>
         </div>
       </div>
@@ -118,7 +116,7 @@ export default function Home() {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
-              <Button className="bg-teal-500 hover:bg-teal-600 text-white py-6">Search</Button>
+              <Button className="bg-yellow-500 hover:bg-yellow-600 text-white py-6">Search</Button>
             </div>
           </Card>
         </div>
@@ -133,7 +131,7 @@ export default function Home() {
               onClick={() => setSelectedCategory(category)}
               className={`px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base rounded-full font-medium transition whitespace-nowrap ${
                 selectedCategory === category
-                  ? "bg-teal-500 text-white"
+                  ? "bg-yellow-500 text-white"
                   : "bg-slate-200 text-slate-700 hover:bg-slate-300"
               }`}
             >
@@ -162,7 +160,7 @@ export default function Home() {
                   <Card className="overflow-hidden hover:shadow-lg transition cursor-pointer h-full flex flex-col">
                     <div className="h-32 sm:h-40 bg-cover bg-center" style={{ backgroundImage: `url(${course.image_url})` }} />
                     <div className="p-3 sm:p-4 flex-grow flex flex-col">
-                      <div className="bg-teal-100 text-teal-700 text-xs font-semibold px-2 py-1 rounded w-fit mb-2">
+                      <div className="bg-yellow-100 text-yellow-700 text-xs font-semibold px-2 py-1 rounded w-fit mb-2">
                         {course.category}
                       </div>
                       <h3 className="font-bold text-sm mb-1 sm:mb-2 line-clamp-2 flex-grow">{course.title}</h3>
