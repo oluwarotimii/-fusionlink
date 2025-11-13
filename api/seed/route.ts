@@ -9,7 +9,7 @@ export async function GET() {
     // Insert admin user
     await sql(`
       INSERT INTO users (email, password_hash, role, username, is_active)
-      VALUES ('admin@fsl.com', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'admin', 'admin', true)
+      VALUES ('admin@fsl.com', '6f61c7271cb93da7d25d10357c05b4cf22962e13af96bd49a9f14253fed10858', 'admin', 'admin', true)
       ON CONFLICT DO NOTHING
     `)
 
