@@ -9,7 +9,13 @@ export async function GET() {
       "SELECT id, title, description, instructor_name, instructor_image_url, price, original_price, discount_percentage, category, image_url, video_url, duration_hours, total_lectures, total_sections, total_students, language, is_featured, is_active FROM courses WHERE is_active = true ORDER BY is_featured DESC, created_at DESC",
     )
     console.log("[v0] Courses fetched successfully:", courses.length)
-    const response = Response.json(courses)
+
+    const coursesWithNumericPrice = courses.map((course) => ({
+      ...course,
+      price: parseFloat(course.price as string),
+    }))
+
+    const response = Response.json(coursesWithNumericPrice)
     response.headers.set("Content-Type", "application/json")
     return response
   } catch (error) {
