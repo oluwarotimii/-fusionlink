@@ -11,7 +11,7 @@ export default function AdminLayout({
   children: React.ReactNode
 }>) {
   const cookieStore = cookies()
-  const authToken = cookieStore.get("auth_token")
+  const authToken = cookieStore.get("auth_token")?.value
 
   if (!authToken) {
     redirect("/admin/login")
