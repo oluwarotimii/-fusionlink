@@ -29,16 +29,9 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("All")
-  const [socialLinks, setSocialLinks] = useState({
-    facebook: "",
-    twitter: "",
-    instagram: "",
-    linkedin: "",
-  });
 
   useEffect(() => {
     fetchCourses()
-    fetchSocialLinks()
   }, [])
 
   useEffect(() => {
@@ -56,18 +49,6 @@ export default function Home() {
       console.error("Error fetching courses:", error)
     } finally {
       setLoading(false)
-    }
-  }
-
-  const fetchSocialLinks = async () => {
-    try {
-      const response = await fetch("/api/admin/settings")
-      if (response.ok) {
-        const data = await response.json()
-        setSocialLinks(data)
-      }
-    } catch (error) {
-      console.error("Error fetching social links:", error)
     }
   }
 
@@ -218,38 +199,6 @@ export default function Home() {
             <Link href="/terms-of-service" className="hover:text-white">Terms of Service</Link>
             <Link href="/contact-us" className="hover:text-white">Contact Us</Link>
           </div>
-          {socialLinks.facebook && (
-            <div className="flex justify-center gap-4 mt-4">
-              {socialLinks.facebook && (
-                <a href={socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="text-white hover:text-blue-500">
-                  <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path fillRule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.776-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33V22C18.343 21.128 22 16.991 22 12z" clipRule="evenodd" />
-                  </svg>
-                </a>
-              )}
-              {socialLinks.twitter && (
-                <a href={socialLinks.twitter} target="_blank" rel="noopener noreferrer" className="text-white hover:text-blue-400">
-                  <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M8.29 20.251c1.105.214 2.247.322 3.404.322 3.676 0 7.166-1.407 9.792-3.617l.001-.002c.339-.314.339-.827 0-1.141-.339-.314-.89-.314-1.229 0l-.001.002c-2.39 2.08-5.68 3.205-9.07 3.205-1.058 0-2.09-.127-3.08-.374-.386-.096-.803.07-1.017.456-.214.386-.07.803.316.919zm1.757-1.172c.386.096.803-.07 1.017-.456.214-.386.07-.803-.316-.919-.386-.096-.803.07-1.017.456-.214.386-.07.803.316.919zM12 2C6.477 2 2 6.477 2 12c0 4.23 2.636 7.857 6.32 9.333.339.13.705.195 1.07.195.365 0 .731-.065 1.07-.195C17.364 19.857 20 16.23 20 12c0-5.523-4.477-10-10-10zm0 18c-3.39 0-6.58-1.31-8.98-3.51-.339-.314-.339-.827 0-1.141.339-.314.89-.314 1.229 0C7.42 17.69 10.61 19 14 19c3.39 0 6.58-1.31 8.98-3.51.339-.314.89-.314 1.229 0 .339.314.339.827 0 1.141C18.58 18.69 15.39 20 12 20z" />
-                  </svg>
-                </a>
-              )}
-              {socialLinks.instagram && (
-                <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" className="text-white hover:text-pink-500">
-                  <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path fillRule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.776-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33V22C18.343 21.128 22 16.991 22 12z" clipRule="evenodd" />
-                  </svg>
-                </a>
-              )}
-              {socialLinks.linkedin && (
-                <a href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="text-white hover:text-blue-700">
-                  <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path fillRule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.776-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33V22C18.343 21.128 22 16.991 22 12z" clipRule="evenodd" />
-                  </svg>
-                </a>
-              )}
-            </div>
-          )}
         </div>
       </footer>
     </div>
