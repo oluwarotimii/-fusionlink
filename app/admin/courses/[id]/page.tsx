@@ -50,7 +50,13 @@ export default function EditCoursePage() {
       const response = await fetch(`/api/courses/${courseId}`)
       if (response.ok) {
         const data = await response.json()
-        setFormData(data)
+        const processedData = { ...data };
+        ["price", "original_price", "discount_percentage", "duration_hours", "total_lectures", "total_sections", "total_students"].forEach(field => {
+          if (processedData[field] === 0) {
+            processedData[field] = "";
+          }
+        });
+        setFormData(processedData)
       } else {
         setError("Course not found")
       }
@@ -75,10 +81,8 @@ export default function EditCoursePage() {
               "discount_percentage",
               "duration_hours",
               "total_lectures",
-              "total_sections",
-              "total_students",
             ].includes(name)
-              ? Number.parseFloat(value) || 0
+              ? value === "" ? "" : Number.parseFloat(value)
               : value,
           }
         : null,
@@ -259,18 +263,8 @@ export default function EditCoursePage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Total Sections</label>
-                <Input name="total_sections" type="number" value={formData.total_sections} onChange={handleChange} />
-              </div>
-
-              <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">Total Lectures</label>
                 <Input name="total_lectures" type="number" value={formData.total_lectures} onChange={handleChange} />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Total Students</label>
-                <Input name="total_students" type="number" value={formData.total_students} onChange={handleChange} />
               </div>
             </div>
 

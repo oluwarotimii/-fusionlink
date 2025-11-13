@@ -20,15 +20,15 @@ export default function NewCoursePage() {
     description: "",
     instructor_name: "",
     instructor_image_url: "/placeholder.svg?height=300&width=200",
-    price: 0,
-    original_price: 0,
-    discount_percentage: 0,
+    price: "",
+    original_price: "",
+    discount_percentage: "",
     category: "Development",
     image_url: "/placeholder.svg?height=400&width=600",
     video_url: "",
-    duration_hours: 0,
-    total_lectures: 0,
-    total_sections: 0,
+    duration_hours: "",
+    total_lectures: "",
+    total_sections: "",
     language: "English",
   })
 
@@ -44,7 +44,7 @@ export default function NewCoursePage() {
         "total_lectures",
         "total_sections",
       ].includes(name)
-        ? Number.parseFloat(value) || 0
+        ? value === "" ? "" : Number.parseFloat(value)
         : value,
     }))
   }
@@ -236,17 +236,6 @@ export default function NewCoursePage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Total Sections</label>
-                <Input
-                  name="total_sections"
-                  type="number"
-                  value={formData.total_sections}
-                  onChange={handleChange}
-                  placeholder="0"
-                />
-              </div>
-
-              <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">Total Lectures</label>
                 <Input
                   name="total_lectures"
@@ -255,11 +244,6 @@ export default function NewCoursePage() {
                   onChange={handleChange}
                   placeholder="0"
                 />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Total Students</label>
-                <Input name="total_students" type="number" disabled placeholder="Auto-calculated" />
               </div>
             </div>
 
