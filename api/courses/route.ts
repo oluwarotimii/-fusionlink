@@ -41,7 +41,8 @@ export async function POST(request: Request) {
       original_price,
       discount_percentage,
       category,
-      image_url,
+      banner_background_color,
+      banner_text_color,
       video_url,
       duration_hours,
       total_lectures,
@@ -57,9 +58,9 @@ export async function POST(request: Request) {
       `INSERT INTO courses (
         title, description, instructor_name, instructor_image_url,
         price, original_price, discount_percentage, category,
-        image_url, video_url, duration_hours, total_lectures,
+        banner_background_color, banner_text_color, video_url, duration_hours, total_lectures,
         total_sections, language, is_active
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, true)
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, true)
       RETURNING id, title, price, category`,
       [
         title,
@@ -70,7 +71,8 @@ export async function POST(request: Request) {
         original_price || price,
         discount_percentage || 0,
         category || "Development",
-        image_url || "/placeholder.svg?height=400&width=600",
+        banner_background_color || "#007bff",
+        banner_text_color || "#ffffff",
         video_url || "",
         duration_hours || 0,
         total_lectures || 0,

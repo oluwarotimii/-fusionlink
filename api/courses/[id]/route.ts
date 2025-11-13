@@ -5,7 +5,7 @@ const sql = neon(process.env.DATABASE_URL!)
 export async function GET(request: Request, { params }: { params: { id: string } }) {
   try {
     console.log("[v0] Fetching course:", params.id)
-    const courses = await sql("SELECT * FROM courses WHERE id = $1", [Number.parseInt(params.id)])
+    const courses = await sql`SELECT id, title, description, instructor_name, instructor_image_url, price, original_price, discount_percentage, category, banner_background_color, banner_text_color, video_url, duration_hours, total_lectures, total_sections, total_students, language, is_featured, is_active FROM courses WHERE id = ${Number.parseInt(params.id)}`
 
     if (courses.length === 0) {
       console.log("[v0] Course not found:", params.id)
@@ -32,7 +32,8 @@ export async function PUT(request: Request, { params }: { params: { id: string }
       instructor_image_url,
       original_price,
       discount_percentage,
-      image_url,
+      banner_background_color,
+      banner_text_color,
       video_url,
       duration_hours,
       total_lectures,
@@ -42,14 +43,14 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     } = body
 
     const result = await sql(
-      `UPDATE courses 
-       SET title = $1, description = $2, price = $3, category = $4, 
-           instructor_name = $5, instructor_image_url = $6, 
+      `UPDATE courses
+       SET title = $1, description = $2, price = $3, category = $4,
+           instructor_name = $5, instructor_image_url = $6,
            original_price = $7, discount_percentage = $8,
-           image_url = $9, video_url = $10, duration_hours = $11,
-           total_lectures = $12, total_sections = $13, total_students = $14,
-           language = $15, updated_at = CURRENT_TIMESTAMP
-       WHERE id = $16
+           banner_background_color = $9, banner_text_color = $10, video_url = $11, duration_hours = $12,
+           total_lectures = $13, total_sections = $14, total_students = $15,
+           language = $16, updated_at = CURRENT_TIMESTAMP
+       WHERE id = $17
        RETURNING *`,
       [
         title,
@@ -60,7 +61,8 @@ export async function PUT(request: Request, { params }: { params: { id: string }
         instructor_image_url,
         original_price,
         discount_percentage,
-        image_url,
+        banner_background_color,
+        banner_text_color,
         video_url,
         duration_hours,
         total_lectures,
@@ -70,7 +72,6 @@ export async function PUT(request: Request, { params }: { params: { id: string }
         Number.parseInt(params.id),
       ],
     )
-
     if (result.length === 0) {
       return Response.json({ error: "Course not found" }, { status: 404 })
     }

@@ -21,7 +21,8 @@ interface Course {
   original_price: number
   discount_percentage: number
   category: string
-  image_url: string
+  banner_background_color: string
+  banner_text_color: string
   video_url: string
   duration_hours: number
   total_lectures: number
@@ -56,6 +57,9 @@ export default function EditCoursePage() {
             processedData[field] = "";
           }
         });
+        // Set default colors if not present
+        processedData.banner_background_color = processedData.banner_background_color || "#007bff";
+        processedData.banner_text_color = processedData.banner_text_color || "#ffffff";
         setFormData(processedData)
       } else {
         setError("Course not found")
@@ -101,7 +105,7 @@ export default function EditCoursePage() {
       const response = await fetch(`/api/courses/${courseId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, image_url: null }), // Set image_url to null as it's no longer used
       })
 
       if (response.ok) {
@@ -239,9 +243,25 @@ export default function EditCoursePage() {
             {/* Media URLs */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Course Image URL</label>
-                <Input name="image_url" value={formData.image_url} onChange={handleChange} />
+                <label className="block text-sm font-medium text-slate-700 mb-2">Banner Background Color</label>
+                <Input
+                  name="banner_background_color"
+                  type="color"
+                  value={formData.banner_background_color}
+                  onChange={handleChange}
+                />
               </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Banner Text Color</label>
+                <Input
+                  name="banner_text_color"
+                  type="color"
+                  value={formData.banner_text_color}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
 
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">Video URL</label>
