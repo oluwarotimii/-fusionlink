@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, use } from "react"
 import { Heart, Play, BookOpen, Clock, Languages } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -31,7 +31,8 @@ interface Review {
   comment: string
 }
 
-export default function CourseDetail({ params }: { params: { id: string } }) {
+export default function CourseDetail({ params: awaitedParams }: { params: Promise<{ id: string }> }) {
+  const params = use(awaitedParams);
   const [course, setCourse] = useState<Course | null>(null)
   const [reviews, setReviews] = useState<Review[]>([])
   const [loading, setLoading] = useState(true)
