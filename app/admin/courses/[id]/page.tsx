@@ -21,8 +21,7 @@ interface Course {
   original_price: number
   discount_percentage: number
   category: string
-  banner_background_color: string
-  banner_text_color: string
+  image_url: string
   video_url: string
   duration_hours: number
   total_lectures: number
@@ -57,9 +56,6 @@ export default function EditCoursePage() {
             processedData[field] = "";
           }
         });
-        // Set default colors if not present
-        processedData.banner_background_color = processedData.banner_background_color || "#007bff";
-        processedData.banner_text_color = processedData.banner_text_color || "#ffffff";
         setFormData(processedData)
       } else {
         setError("Course not found")
@@ -85,6 +81,8 @@ export default function EditCoursePage() {
               "discount_percentage",
               "duration_hours",
               "total_lectures",
+              "total_sections",
+              "total_students",
             ].includes(name)
               ? value === "" ? "" : Number.parseFloat(value)
               : value,
@@ -243,23 +241,8 @@ export default function EditCoursePage() {
             {/* Media URLs */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Banner Background Color</label>
-                <Input
-                  name="banner_background_color"
-                  type="color"
-                  value={formData.banner_background_color}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Banner Text Color</label>
-                <Input
-                  name="banner_text_color"
-                  type="color"
-                  value={formData.banner_text_color}
-                  onChange={handleChange}
-                />
+                <label className="block text-sm font-medium text-slate-700 mb-2">Course Image URL</label>
+                <Input name="image_url" value={formData.image_url} onChange={handleChange} />
               </div>
 
               <div>

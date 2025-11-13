@@ -15,8 +15,7 @@ interface Course {
   price: number
   original_price: number
   discount_percentage: number
-  banner_background_color: string
-  banner_text_color: string
+  image_url: string
   category: string
   total_students: number
   total_sections: number
@@ -161,15 +160,7 @@ export default function Home() {
               {filteredCourses.map((course) => (
                 <Link key={course.id} href={`/course/${course.id}`}>
                   <Card className="overflow-hidden hover:shadow-lg transition cursor-pointer h-full flex flex-col">
-                    <div
-                      className="h-32 sm:h-40 flex items-center justify-center text-center p-4"
-                      style={{
-                        backgroundColor: course.banner_background_color,
-                        color: course.banner_text_color,
-                      }}
-                    >
-                      <h3 className="font-bold text-lg line-clamp-2">{course.title}</h3>
-                    </div>
+                    <div className="h-32 sm:h-40 bg-cover bg-center" style={{ backgroundImage: `url(${course.image_url})` }} />
                     <div className="p-3 sm:p-4 flex-grow flex flex-col">
                       <div className="bg-teal-100 text-teal-700 text-xs font-semibold px-2 py-1 rounded w-fit mb-2">
                         {course.category}

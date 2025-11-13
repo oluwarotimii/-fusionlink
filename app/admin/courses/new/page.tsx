@@ -24,8 +24,7 @@ export default function NewCoursePage() {
     original_price: "",
     discount_percentage: "",
     category: "Development",
-    banner_background_color: "#007bff", // Default blue
-    banner_text_color: "#ffffff", // Default white
+    image_url: "/placeholder.svg?height=400&width=600",
     video_url: "",
     duration_hours: "",
     total_lectures: "",
@@ -210,25 +209,9 @@ export default function NewCoursePage() {
             {/* Media URLs */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Banner Background Color</label>
-                <Input
-                  name="banner_background_color"
-                  type="color"
-                  value={formData.banner_background_color}
-                  onChange={handleChange}
-                />
+                <label className="block text-sm font-medium text-slate-700 mb-2">Course Image URL</label>
+                <Input name="image_url" value={formData.image_url} onChange={handleChange} placeholder="Image URL" />
               </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Banner Text Color</label>
-                <Input
-                  name="banner_text_color"
-                  type="color"
-                  value={formData.banner_text_color}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
 
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">Video URL</label>

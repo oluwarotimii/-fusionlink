@@ -15,8 +15,7 @@ interface Course {
   price: number
   original_price: number
   discount_percentage: number
-  banner_background_color: string
-  banner_text_color: string
+  image_url: string
   video_url: string
   total_sections: number
   total_lectures: number
@@ -128,11 +127,15 @@ export default function CourseDetail({ params: awaitedParams }: { params: Promis
                 <div
                   className="relative w-full bg-black rounded-lg overflow-hidden aspect-video flex items-center justify-center"
                   style={{
-                    backgroundColor: course.banner_background_color,
-                    color: course.banner_text_color,
+                    backgroundImage: `url(${course.image_url})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
                   }}
                 >
-                  <h2 className="text-2xl font-bold text-center px-4">{course.title}</h2>
+                  <div className="absolute inset-0 bg-black/30" />
+                  <button className="relative bg-white text-black rounded-full p-4 hover:bg-slate-100 transition">
+                    <Play className="w-8 h-8 fill-current" />
+                  </button>
                 </div>
               )}
             </div>
