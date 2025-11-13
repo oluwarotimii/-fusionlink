@@ -2,7 +2,7 @@ import type React from "react"
 import { Card } from "@/components/ui/card"
 import Link from "next/link"
 import { LayoutDashboard, BookOpen, Users, Settings } from "lucide-react"
-import { cookies } from "next/headers"
+import { cookies, headers } from "next/headers"
 import { redirect } from "next/navigation"
 
 export default async function AdminLayout({
@@ -12,8 +12,9 @@ export default async function AdminLayout({
 }>) {
   const cookieStore = await cookies()
   const authToken = cookieStore.get("auth_token")?.value
+  const pathname = headers().get('x-invoke-path');
 
-  if (!authToken) {
+  if (!authToken && pathname !== '/admin/login') {
     redirect("/admin/login")
   }
 
