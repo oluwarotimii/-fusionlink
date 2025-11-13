@@ -313,11 +313,14 @@ export default function NewCoursePage() {
               >
                 {loading ? "Creating..." : "Create Course"}
               </Button>
-              <Link href="/admin/courses" className="flex-1">
-                <Button variant="outline" className="w-full py-3 bg-transparent">
-                  Cancel
-                </Button>
-              </Link>
+              <Button
+                type="button"
+                variant="outline"
+                className="flex-1 w-full py-3 bg-transparent"
+                onClick={() => router.back()}
+              >
+                Back
+              </Button>
             </div>
           </form>
         </Card>
