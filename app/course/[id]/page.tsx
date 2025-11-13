@@ -123,12 +123,9 @@ export default function CourseDetail({ params: awaitedParams }: { params: Promis
     <div className="min-h-screen bg-white">
       {/* Header */}
       <div className="bg-slate-900 text-white py-4">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-start items-center">
           <Link href="/" className="hover:opacity-80">
-            ← Back to Courses
-          </Link>
-          <Link href="/admin/login" className="text-sm">
-            Admin
+            ← Back
           </Link>
         </div>
       </div>
@@ -300,11 +297,6 @@ export default function CourseDetail({ params: awaitedParams }: { params: Promis
                 </a>
               )}
 
-              <Link href="/courses" className="w-full">
-                <Button variant="outline" className="w-full border-slate-300 bg-transparent">
-                  Enroll for other course
-                </Button>
-              </Link>
 
               <div className="mt-6 pt-6 border-t space-y-3">
                 <div>
