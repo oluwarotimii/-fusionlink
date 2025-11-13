@@ -170,10 +170,10 @@ export default function Home() {
                         <span>({course.total_students})</span>
                       </div>
                       <div className="flex items-center gap-2 mt-auto">
-                        <span className="text-base sm:text-lg font-bold text-slate-900">${course.price.toFixed(2)}</span>
+                        <span className="text-base sm:text-lg font-bold text-slate-900">${Number(course.price).toFixed(2)}</span>
                         {course.original_price && (
                           <span className="text-xs sm:text-sm text-slate-400 line-through">
-                            ${course.original_price.toFixed(2)}
+                            ${Number(course.original_price).toFixed(2)}
                           </span>
                         )}
                       </div>
