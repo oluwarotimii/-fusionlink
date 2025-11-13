@@ -2,12 +2,11 @@ import { neon } from "@neondatabase/serverless"
 
 const sql = neon(process.env.DATABASE_URL!)
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, { params: awaitedParams }: { params: Promise<{ id: string }> }) {
   try {
+    const params = await awaitedParams;
     console.log("[v0] Fetching reviews for course:", params.id)
-    const reviews = await sql("SELECT * FROM reviews WHERE course_id = $1 ORDER BY created_at DESC", [
-      Number.parseInt(params.id),
-    ])
+    const reviews = await sql`SELECT * FROM reviews WHERE course_id = ${Number.parseInt(params.id)} ORDER BY created_at DESC`
     console.log("[v0] Reviews fetched:", reviews.length)
     return Response.json(reviews)
   } catch (error) {

@@ -2,8 +2,9 @@ import { neon } from "@neondatabase/serverless"
 
 const sql = neon(process.env.DATABASE_URL!)
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, { params: awaitedParams }: { params: Promise<{ id: string }> }) {
   try {
+    const params = await awaitedParams;
     console.log("[v0] Fetching course:", params.id)
     const courses = await sql`SELECT * FROM courses WHERE id = ${Number.parseInt(params.id)}`
 
@@ -20,8 +21,9 @@ export async function GET(request: Request, { params }: { params: { id: string }
   }
 }
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(request: Request, { params: awaitedParams }: { params: Promise<{ id: string }> }) {
   try {
+    const params = await awaitedParams;
     const body = await request.json()
     const {
       title,
@@ -61,8 +63,9 @@ export async function PUT(request: Request, { params }: { params: { id: string }
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request, { params: awaitedParams }: { params: Promise<{ id: string }> }) {
   try {
+    const params = await awaitedParams;
     await sql`DELETE FROM courses WHERE id = ${Number.parseInt(params.id)}`
     return Response.json({ success: true })
   } catch (error) {
