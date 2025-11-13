@@ -2,12 +2,21 @@ import type React from "react"
 import { Card } from "@/components/ui/card"
 import Link from "next/link"
 import { LayoutDashboard, BookOpen, Users, Settings } from "lucide-react"
+import { cookies } from "next/headers"
+import { redirect } from "next/navigation"
 
 export default function AdminLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const cookieStore = cookies()
+  const authToken = cookieStore.get("auth_token")
+
+  if (!authToken) {
+    redirect("/admin/login")
+  }
+
   return (
     <div className="min-h-screen flex">
       {/* Sidebar */}

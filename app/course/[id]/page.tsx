@@ -225,9 +225,9 @@ export default function CourseDetail({ params: awaitedParams }: { params: Promis
             <Card className="p-6 sticky top-8">
               <div className="mb-6">
                 <div className="flex items-baseline gap-2 mb-2">
-                  <span className="text-4xl font-bold text-slate-900">${Number(course.price).toFixed(2)}</span>
+                  <span className="text-4xl font-bold text-slate-900">₦{Number(course.price).toFixed(2)}</span>
                   {course.original_price && (
-                    <span className="text-lg text-slate-400 line-through">${Number(course.original_price).toFixed(2)}</span>
+                    <span className="text-lg text-slate-400 line-through">₦{Number(course.original_price).toFixed(2)}</span>
                   )}
                 </div>
                 {course.discount_percentage > 0 && (
@@ -241,14 +241,11 @@ export default function CourseDetail({ params: awaitedParams }: { params: Promis
                 Enroll Now
               </Button>
 
-              <Button
-                variant="outline"
-                className="w-full border-slate-300 bg-transparent"
-                onClick={() => setWishlist(!wishlist)}
-              >
-                <Heart className={`w-5 h-5 mr-2 ${wishlist ? "fill-red-500 text-red-500" : ""}`} />
-                Add to Wishlist
-              </Button>
+              <Link href="/courses" className="w-full">
+                <Button variant="outline" className="w-full border-slate-300 bg-transparent">
+                  Enroll for other course
+                </Button>
+              </Link>
 
               <div className="mt-6 pt-6 border-t space-y-3">
                 <div>

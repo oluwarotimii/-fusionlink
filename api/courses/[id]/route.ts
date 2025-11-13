@@ -57,7 +57,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
         price,
         category,
         instructor_name,
-        instructor_image_url,
+        instructor_image_url || "https://cdn-icons-png.flaticon.com/512/3675/3675805.png",
         original_price,
         discount_percentage,
         image_url,

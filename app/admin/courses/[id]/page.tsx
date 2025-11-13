@@ -56,6 +56,9 @@ export default function EditCoursePage() {
             processedData[field] = "";
           }
         });
+        processedData.instructor_image_url = processedData.instructor_image_url === "/placeholder.svg" || !processedData.instructor_image_url
+          ? "https://cdn-icons-png.flaticon.com/512/3675/3675805.png"
+          : processedData.instructor_image_url;
         setFormData(processedData)
       } else {
         setError("Course not found")

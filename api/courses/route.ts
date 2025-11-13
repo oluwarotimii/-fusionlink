@@ -65,7 +65,7 @@ export async function POST(request: Request) {
         title,
         description || "",
         instructor_name,
-        instructor_image_url || "/placeholder.svg?height=300&width=200",
+        instructor_image_url || "https://cdn-icons-png.flaticon.com/512/3675/3675805.png",
         price,
         original_price || price,
         discount_percentage || 0,

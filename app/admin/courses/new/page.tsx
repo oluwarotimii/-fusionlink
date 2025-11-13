@@ -19,7 +19,7 @@ export default function NewCoursePage() {
     title: "",
     description: "",
     instructor_name: "",
-    instructor_image_url: "/placeholder.svg?height=300&width=200",
+    instructor_image_url: "https://cdn-icons-png.flaticon.com/512/3675/3675805.png",
     price: "",
     original_price: "",
     discount_percentage: "",
