@@ -35,6 +35,7 @@ export default function CoursesManager() {
       const response = await fetch("/api/courses")
       if (response.ok) {
         const data = await response.json()
+        console.log("[v0] Fetched courses data:", data)
         setCourses(data)
         setFilteredCourses(data)
       }
