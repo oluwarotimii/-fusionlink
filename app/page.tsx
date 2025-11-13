@@ -6,6 +6,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 interface Course {
   id: number
@@ -84,6 +85,7 @@ export default function Home() {
             <Link href="/admin/login">
               <Button className="bg-slate-900 hover:bg-slate-800 text-white">Admin</Button>
             </Link>
+            <ThemeToggle />
           </div>
         </div>
       </div>
