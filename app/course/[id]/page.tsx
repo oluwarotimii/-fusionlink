@@ -2,6 +2,7 @@
 
 import { useState, useEffect, use } from "react"
 import { Heart, Play, BookOpen, Clock, Languages } from "lucide-react"
+import { FaWhatsapp } from "react-icons/fa" // Import WhatsApp icon
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import Link from "next/link"
@@ -42,6 +43,8 @@ export default function CourseDetail({ params: awaitedParams }: { params: Promis
     bank_name: "",
     account_number: "",
     transfer_instructions: "",
+    whatsapp_number: "",
+    whatsapp_enabled: false,
   });
 
   useEffect(() => {
@@ -83,7 +86,13 @@ export default function CourseDetail({ params: awaitedParams }: { params: Promis
         const response = await fetch("/api/admin/settings");
         if (response.ok) {
           const data = await response.json();
-          setBankDetails(data);
+          setBankDetails({
+            bank_name: data.bank_name || "",
+            account_number: data.account_number || "",
+            transfer_instructions: data.transfer_instructions || "",
+            whatsapp_number: data.whatsapp_number || "",
+            whatsapp_enabled: data.whatsapp_enabled || false,
+          });
         }
       } catch (error) {
         console.error("Error fetching bank details:", error);
@@ -275,6 +284,20 @@ export default function CourseDetail({ params: awaitedParams }: { params: Promis
                     <span className="font-semibold">Instructions:</span> {bankDetails.transfer_instructions || "N/A"}
                   </p>
                 </Card>
+              )}
+
+              {bankDetails.whatsapp_enabled && bankDetails.whatsapp_number && (
+                <a
+                  href={`https://wa.me/${bankDetails.whatsapp_number}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full mt-3"
+                >
+                  <Button className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-3 flex items-center justify-center gap-2">
+                    <FaWhatsapp className="w-5 h-5" />
+                    Chat on WhatsApp
+                  </Button>
+                </a>
               )}
 
               <Link href="/courses" className="w-full">

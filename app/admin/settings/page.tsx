@@ -6,11 +6,14 @@ import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { Switch } from "@/components/ui/switch"
 
 interface BankDetails {
   bank_name: string
   account_number: string
   transfer_instructions: string
+  whatsapp_number: string
+  whatsapp_enabled: boolean
 }
 
 export default function AdminSettingsPage() {
@@ -18,6 +21,8 @@ export default function AdminSettingsPage() {
     bank_name: "",
     account_number: "",
     transfer_instructions: "",
+    whatsapp_number: "",
+    whatsapp_enabled: false,
   })
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -34,7 +39,13 @@ export default function AdminSettingsPage() {
       const response = await fetch("/api/admin/settings")
       if (response.ok) {
         const data = await response.json()
-        setBankDetails(data)
+        setBankDetails({
+          bank_name: data.bank_name || "",
+          account_number: data.account_number || "",
+          transfer_instructions: data.transfer_instructions || "",
+          whatsapp_number: data.whatsapp_number || "",
+          whatsapp_enabled: data.whatsapp_enabled || false,
+        })
       } else {
         setError("Failed to fetch bank details.")
       }
@@ -49,6 +60,10 @@ export default function AdminSettingsPage() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setBankDetails((prev) => ({ ...prev, [name]: value }))
+  }
+
+  const handleSwitchChange = (checked: boolean) => {
+    setBankDetails((prev) => ({ ...prev, whatsapp_enabled: checked }))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -124,6 +139,28 @@ export default function AdminSettingsPage() {
               placeholder="e.g., Please include your course title in the transfer description."
               rows={5}
             />
+          </div>
+
+          <div className="space-y-4 pt-4 border-t">
+            <h2 className="text-xl font-bold text-slate-900">WhatsApp Settings</h2>
+            <div>
+              <Label htmlFor="whatsapp_number">WhatsApp Number</Label>
+              <Input
+                id="whatsapp_number"
+                name="whatsapp_number"
+                value={bankDetails.whatsapp_number}
+                onChange={handleChange}
+                placeholder="e.g., +2348012345678"
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <Label htmlFor="whatsapp_enabled">Enable WhatsApp Button</Label>
+              <Switch
+                id="whatsapp_enabled"
+                checked={bankDetails.whatsapp_enabled}
+                onCheckedChange={handleSwitchChange}
+              />
+            </div>
           </div>
 
           <Button type="submit" disabled={saving} className="bg-yellow-500 hover:bg-yellow-600 text-white">
