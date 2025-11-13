@@ -40,6 +40,11 @@ export default function CourseDetail({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     const fetchCourseAndReviews = async () => {
+      if (!params.id) {
+        setError("Course ID is missing.");
+        setLoading(false);
+        return;
+      }
       try {
         setLoading(true)
         setError(null)
@@ -219,9 +224,9 @@ export default function CourseDetail({ params }: { params: { id: string } }) {
             <Card className="p-6 sticky top-8">
               <div className="mb-6">
                 <div className="flex items-baseline gap-2 mb-2">
-                  <span className="text-4xl font-bold text-slate-900">${course.price.toFixed(2)}</span>
+                  <span className="text-4xl font-bold text-slate-900">${Number(course.price).toFixed(2)}</span>
                   {course.original_price && (
-                    <span className="text-lg text-slate-400 line-through">${course.original_price.toFixed(2)}</span>
+                    <span className="text-lg text-slate-400 line-through">${Number(course.original_price).toFixed(2)}</span>
                   )}
                 </div>
                 {course.discount_percentage > 0 && (
