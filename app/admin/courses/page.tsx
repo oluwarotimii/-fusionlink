@@ -39,7 +39,7 @@ export default function CoursesManager() {
         setFilteredCourses(data)
       }
     } catch (error) {
-      console.error("[v0] Error fetching courses:", error)
+      console.error("Error fetching courses:", error)
     } finally {
       setLoading(false)
     }
@@ -68,7 +68,7 @@ export default function CoursesManager() {
         setCourses(courses.filter((c) => c.id !== id))
       }
     } catch (error) {
-      console.error("[v0] Error deleting course:", error)
+      console.error("Error deleting course:", error)
     }
   }
 

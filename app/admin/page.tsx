@@ -24,7 +24,7 @@ export default function AdminDashboard() {
         setStats(data)
       }
     } catch (error) {
-      console.error("[v0] Error fetching stats:", error)
+      console.error("Error fetching stats:", error)
     } finally {
       setLoading(false)
     }

@@ -17,7 +17,7 @@ export async function getAuthUser(): Promise<AuthUser | null> {
     const decoded = JSON.parse(Buffer.from(token, "base64").toString())
     return decoded
   } catch (error) {
-    console.error("[v0] Error decoding auth token:", error)
+    console.error("Error decoding auth token:", error)
     return null
   }
 }

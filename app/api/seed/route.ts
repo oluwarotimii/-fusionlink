@@ -4,7 +4,7 @@ const sql = neon(process.env.DATABASE_URL!)
 
 export async function GET() {
   try {
-    console.log("[v0] Seeding database with dummy data...")
+    console.log("Seeding database with dummy data...")
 
     // Insert admin user
     await sql(`
@@ -249,7 +249,7 @@ export async function GET() {
       { status: 200, headers: { "Content-Type": "application/json" } },
     )
   } catch (error) {
-    console.error("[v0] Seeding error:", error)
+    console.error("Seeding error:", error)
     return Response.json(
       {
         error: "Failed to seed database",

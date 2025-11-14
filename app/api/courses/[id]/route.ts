@@ -5,18 +5,18 @@ const sql = neon(process.env.DATABASE_URL!)
 export async function GET(request: Request, { params: awaitedParams }: { params: Promise<{ id: string }> }) {
   try {
     const params = await awaitedParams;
-    console.log("[v0] Fetching course:", params.id)
+    console.log("Fetching course:", params.id)
     const courses = await sql`SELECT * FROM courses WHERE id = ${Number.parseInt(params.id)}`
 
     if (courses.length === 0) {
-      console.log("[v0] Course not found:", params.id)
+      console.log("Course not found:", params.id)
       return Response.json({ error: "Course not found" }, { status: 404 })
     }
 
-    console.log("[v0] Course fetched successfully")
+    console.log("Course fetched successfully")
     return Response.json(courses[0])
   } catch (error) {
-    console.error("[v0] Database error:", error)
+    console.error("Database error:", error)
     return Response.json({ message: "Server error. Please try again later." }, { status: 500 })
   }
 }
@@ -58,7 +58,7 @@ export async function PUT(request: Request, { params: awaitedParams }: { params:
 
     return Response.json(result[0])
   } catch (error) {
-    console.error("[v0] Database error:", error)
+    console.error("Database error:", error)
     return Response.json({ message: "Server error. Please try again later." }, { status: 500 })
   }
 }
@@ -69,7 +69,7 @@ export async function DELETE(request: Request, { params: awaitedParams }: { para
     await sql`DELETE FROM courses WHERE id = ${Number.parseInt(params.id)}`
     return Response.json({ success: true })
   } catch (error) {
-    console.error("[v0] Database error:", error)
+    console.error("Database error:", error)
     return Response.json({ message: "Server error. Please try again later." }, { status: 500 })
   }
 }

@@ -30,7 +30,7 @@ export default function SeedDataPage() {
       }
     } catch (err) {
       setError("An error occurred. Please try again.")
-      console.error("[v0] Error seeding data:", err)
+      console.error("Error seeding data:", err)
     } finally {
       setLoading(false)
     }

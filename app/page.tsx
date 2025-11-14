@@ -76,9 +76,11 @@ export default function Home() {
       {/* Header Navigation */}
       <div className="bg-white border-b sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <Link href="/">
-            <h1 className="text-2xl font-bold text-slate-900 cursor-pointer">Fusionlink Solutions Academy</h1>
-          </Link>
+          <div className="flex items-center gap-4">
+            <Link href="/">
+              <h1 className="text-2xl font-bold text-slate-900 cursor-pointer">Fusionlink Solutions Academy</h1>
+            </Link>
+          </div>
           <div className="flex gap-2 flex-wrap justify-center">
           </div>
         </div>

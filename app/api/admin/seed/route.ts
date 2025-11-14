@@ -181,7 +181,7 @@ export async function POST() {
 
     return Response.json({ message: "Demo data seeded successfully!" })
   } catch (error) {
-    console.error("[v0] Seed error:", error)
+    console.error("Seed error:", error)
     return Response.json({ error: "Failed to seed data", details: String(error) }, { status: 500 })
   }
 }

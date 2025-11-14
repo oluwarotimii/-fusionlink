@@ -10,12 +10,12 @@ export { sql }
 
 export async function testConnection() {
   try {
-    console.log("[v0] Testing database connection...")
+    console.log("Testing database connection...")
     const result = await sql("SELECT 1 as connection_test")
-    console.log("[v0] Database connection successful:", result)
+    console.log("Database connection successful:", result)
     return true
   } catch (error) {
-    console.error("[v0] Database connection failed:", error)
+    console.error("Database connection failed:", error)
     return false
   }
 }

@@ -41,7 +41,7 @@ export async function POST(request: Request) {
 
     return Response.json(result[0], { status: 201 })
   } catch (error) {
-    console.error("[v0] Registration error:", error)
+    console.error("Registration error:", error)
     return Response.json({ message: "Registration failed" }, { status: 500 })
   }
 }

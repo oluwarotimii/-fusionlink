@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, use } from "react"
-import { Heart, Play, BookOpen, Clock, Languages } from "lucide-react"
+import { Heart, Play, BookOpen, Clock, Languages, ArrowLeft } from "lucide-react"
 import { FaWhatsapp } from "react-icons/fa" // Import WhatsApp icon
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -125,7 +125,10 @@ export default function CourseDetail({ params: awaitedParams }: { params: Promis
       <div className="bg-slate-900 text-white py-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-start items-center">
           <Link href="/" className="hover:opacity-80">
-            ← Back
+            <Button variant="outline" size="sm" className="bg-slate-800 text-white border-slate-700 hover:bg-slate-700">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Courses
+            </Button>
           </Link>
         </div>
       </div>

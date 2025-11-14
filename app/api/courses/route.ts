@@ -4,7 +4,7 @@ const sql = neon(process.env.DATABASE_URL!)
 
 export async function GET() {
   try {
-    console.log("[v0] Fetching courses from database...")
+    console.log("Fetching courses from database...")
     const courses = await sql`
       SELECT id, title, description, instructor_name, instructor_image_url, 
              price, original_price, discount_percentage, category, 
@@ -14,12 +14,12 @@ export async function GET() {
       WHERE is_active = true 
       ORDER BY is_featured DESC, created_at DESC
     `
-    console.log("[v0] Courses fetched successfully:", courses.length)
+    console.log("Courses fetched successfully:", courses.length)
     const response = Response.json(courses)
     response.headers.set("Content-Type", "application/json")
     return response
   } catch (error) {
-    console.error("[v0] Database error:", error)
+    console.error("Database error:", error)
     const response = Response.json({ message: "Server error. Please try again later." }, { status: 500 })
     response.headers.set("Content-Type", "application/json")
     return response
@@ -71,7 +71,7 @@ export async function POST(request: Request) {
 
     return Response.json(result[0], { status: 201 })
   } catch (error) {
-    console.error("[v0] Database error:", error)
+    console.error("Database error:", error)
     const response = Response.json({ message: "Server error. Please try again later." }, { status: 500 })
     response.headers.set("Content-Type", "application/json")
     return response

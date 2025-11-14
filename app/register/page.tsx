@@ -5,6 +5,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
+import { ArrowLeft } from "lucide-react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 
@@ -50,7 +51,7 @@ export default function RegisterPage() {
       }
     } catch (err) {
       setError("An error occurred. Please try again.")
-      console.error("[v0] Registration error:", err)
+      console.error("Registration error:", err)
     } finally {
       setLoading(false)
     }
@@ -58,9 +59,18 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md p-8 bg-white">
-        <h1 className="text-3xl font-bold text-slate-900 mb-2">Create Account</h1>
-        <p className="text-slate-600 mb-8">Join FSL to explore amazing courses</p>
+      <div className="w-full max-w-md">
+        <div className="mb-4">
+          <Link href="/" className="inline-block">
+            <Button variant="outline" size="sm" className="bg-slate-800 text-white border-slate-700 hover:bg-slate-700">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back
+            </Button>
+          </Link>
+        </div>
+        <Card className="w-full max-w-md p-8 bg-white">
+          <h1 className="text-3xl font-bold text-slate-900 mb-2">Create Account</h1>
+          <p className="text-slate-600 mb-8">Join FSL to explore amazing courses</p>
 
         <form onSubmit={handleRegister} className="space-y-4">
           {error && <div className="bg-red-100 text-red-700 p-3 rounded text-sm">{error}</div>}

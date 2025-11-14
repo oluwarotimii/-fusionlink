@@ -4,11 +4,11 @@ const sql = neon(process.env.DATABASE_URL!)
 
 export async function GET() {
   try {
-    console.log("[v0] Debug: Testing database connection...")
+    console.log("Debug: Testing database connection...")
 
     // Test connection
     const connectionTest = await sql("SELECT 1 as test")
-    console.log("[v0] Debug: Connection successful")
+    console.log("Debug: Connection successful")
 
     // Check tables
     const tables = await sql(`
@@ -16,19 +16,19 @@ export async function GET() {
       FROM information_schema.tables 
       WHERE table_schema = 'public'
     `)
-    console.log("[v0] Debug: Tables found:", tables.length)
+    console.log("Debug: Tables found:", tables.length)
 
     // Check users
     const users = await sql("SELECT COUNT(*) as count FROM users")
-    console.log("[v0] Debug: Users in database:", users[0])
+    console.log("Debug: Users in database:", users[0])
 
     // Check courses
     const courses = await sql("SELECT COUNT(*) as count FROM courses")
-    console.log("[v0] Debug: Courses in database:", courses[0])
+    console.log("Debug: Courses in database:", courses[0])
 
     // Check reviews
     const reviews = await sql("SELECT COUNT(*) as count FROM reviews")
-    console.log("[v0] Debug: Reviews in database:", reviews[0])
+    console.log("Debug: Reviews in database:", reviews[0])
 
     const response = Response.json({
       status: "ok",
@@ -43,7 +43,7 @@ export async function GET() {
     response.headers.set("Content-Type", "application/json")
     return response
   } catch (error) {
-    console.error("[v0] Debug error:", error)
+    console.error("Debug error:", error)
     const response = Response.json({
       status: "error",
       message: String(error),
