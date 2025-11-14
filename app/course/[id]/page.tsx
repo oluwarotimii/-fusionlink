@@ -102,14 +102,28 @@ export default function CourseDetail({ params: awaitedParams }: { params: Promis
         ])
 
         console.log("Course API response status:", courseRes.status);
-        if (courseRes.status === 404) {
-          setError("Course not found in the database. Please try another course.");
-        } else if (courseRes.ok) {
-          const courseData = await courseRes.json()
-          console.log("Course data received:", courseData);
-          setCourse(courseData)
+        console.log("Course API response headers:", courseRes.headers);
+
+        if (!courseRes.ok) {
+          const errorData = await courseRes.json()
+          console.log("API error response:", errorData);
+          setError(errorData?.error || "Failed to load course. Please try again later.")
         } else {
-          setError("Failed to load course. Please try again later.")
+          const courseData = await courseRes.json()
+          console.log("Raw course data received:", courseData);
+          console.log("Course data type:", typeof courseData);
+          console.log("Course data keys:", Object.keys(courseData || {}));
+
+          if (!courseData || (typeof courseData === 'object' && Object.keys(courseData).length === 0)) {
+            console.log("Course data is empty!");
+            setError("Course data is empty from the server.")
+          } else if (courseData.error) {
+            console.log("API returned error in body:", courseData.error);
+            setError(courseData.error)
+          } else {
+            console.log("Course loaded successfully:", courseData);
+            setCourse(courseData)
+          }
         }
 
         if (reviewsRes.ok) {
