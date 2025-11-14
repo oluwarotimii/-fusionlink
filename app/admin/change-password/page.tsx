@@ -59,19 +59,17 @@ export default function ChangePassword() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <div className="bg-white border-b">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex items-center gap-4">
+    <div className="min-h-full">
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header with back button for mobile */}
+        <div className="mb-6 lg:hidden">
           <Link href="/admin">
-            <button className="p-2 hover:bg-slate-100 rounded">
+            <button className="p-2 hover:bg-slate-100 rounded mb-4">
               <ArrowLeft className="w-5 h-5" />
             </button>
           </Link>
-          <h1 className="text-3xl font-bold text-slate-900">Change Password</h1>
+          <h1 className="text-2xl font-bold text-slate-900">Change Password</h1>
         </div>
-      </div>
-
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Card className="p-8">
           <form onSubmit={handleChangePassword} className="space-y-6">
             {message && <div className="bg-green-100 text-green-700 p-4 rounded">{message}</div>}

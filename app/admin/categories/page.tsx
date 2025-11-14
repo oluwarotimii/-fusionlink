@@ -97,21 +97,23 @@ export default function CategoriesManager() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <div className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex justify-between items-center">
-          <div className="flex items-center gap-4">
-            <Link href="/admin">
-              <button className="p-2 hover:bg-slate-100 rounded">
-                <ArrowLeft className="w-5 h-5" />
-              </button>
-            </Link>
-            <h1 className="text-3xl font-bold text-slate-900">Manage Categories</h1>
-          </div>
+    <div className="min-h-full">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header with back button for mobile */}
+        <div className="mb-6 lg:hidden">
+          <Link href="/admin">
+            <button className="p-2 hover:bg-slate-100 rounded mb-4">
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+          </Link>
+          <h1 className="text-2xl font-bold text-slate-900">Manage Categories</h1>
+        </div>
+
+        {/* Action buttons */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
           <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
             <DialogTrigger asChild>
-              <Button className="bg-teal-500 hover:bg-teal-600 text-white">
+              <Button className="bg-teal-500 hover:bg-teal-600 text-white w-full sm:w-auto">
                 <Plus className="w-5 h-5 mr-2" />
                 Add Category
               </Button>
@@ -147,9 +149,6 @@ export default function CategoriesManager() {
             </DialogContent>
           </Dialog>
         </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {error && (
           <div className="mb-6 p-4 bg-red-100 text-red-700 rounded">
             {error}
