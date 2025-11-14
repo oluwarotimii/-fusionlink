@@ -66,6 +66,18 @@ CREATE TABLE IF NOT EXISTS enrollments (
   UNIQUE(user_id, course_id)
 );
 
+-- Create categories table
+CREATE TABLE IF NOT EXISTS categories (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100) UNIQUE NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Insert default categories if they don't exist
+INSERT INTO categories (name)
+SELECT unnest(ARRAY['Development', 'Design', 'Mobile', 'Backend', 'Frontend', 'FullStack'])
+WHERE NOT EXISTS (SELECT 1 FROM categories LIMIT 1);
+
 -- Create admin settings table
 CREATE TABLE IF NOT EXISTS admin_settings (
   id SERIAL PRIMARY KEY,

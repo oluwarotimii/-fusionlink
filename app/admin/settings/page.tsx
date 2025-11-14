@@ -7,6 +7,8 @@ import { Card } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
+import Link from "next/link"
+import { ArrowLeft } from "lucide-react"
 
 interface BankDetails {
   bank_name: string
@@ -95,16 +97,28 @@ export default function AdminSettingsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-full">
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <p className="text-slate-600">Loading settings...</p>
       </div>
     )
   }
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <h1 className="text-3xl font-bold text-slate-900 mb-6">Bank Details Settings</h1>
-      <Card className="p-6">
+    <div className="min-h-screen bg-slate-50">
+      {/* Header */}
+      <div className="bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex items-center gap-4">
+          <Link href="/admin">
+            <button className="p-2 hover:bg-slate-100 rounded">
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+          </Link>
+          <h1 className="text-3xl font-bold text-slate-900">Bank Details Settings</h1>
+        </div>
+      </div>
+
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <Card className="p-6">
         <form onSubmit={handleSubmit} className="space-y-6">
           {error && <div className="bg-red-100 text-red-700 p-4 rounded">{error}</div>}
           {success && <div className="bg-green-100 text-green-700 p-4 rounded">{success}</div>}

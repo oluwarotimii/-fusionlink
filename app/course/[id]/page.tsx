@@ -6,6 +6,7 @@ import { FaWhatsapp } from "react-icons/fa" // Import WhatsApp icon
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import Link from "next/link"
+import RhythmicLoading from "@/components/RhythmicLoading"
 
 interface Course {
   id: number
@@ -46,6 +47,43 @@ export default function CourseDetail({ params: awaitedParams }: { params: Promis
     whatsapp_number: "",
     whatsapp_enabled: false,
   });
+
+  // Function to convert various YouTube URL formats to embed format
+  const getYouTubeEmbedUrl = (url: string): string => {
+    if (!url) return '';
+
+    // If it's already in embed format, return as is
+    if (url.includes('youtube.com/embed')) {
+      return url;
+    }
+
+    // Extract video ID from various YouTube URL formats
+    let videoId = '';
+
+    // Handle youtu.be short URL
+    if (url.includes('youtu.be')) {
+      const match = url.match(/youtu\.be\/([a-zA-Z0-9_-]+)/);
+      videoId = match ? match[1] : '';
+    }
+    // Handle youtube.com/watch?v= format
+    else if (url.includes('youtube.com/watch')) {
+      const match = url.match(/[?&]v=([a-zA-Z0-9_-]+)/);
+      videoId = match ? match[1] : '';
+    }
+    // Handle youtu.be/ format with time parameters
+    else if (url.includes('youtube.com')) {
+      const match = url.match(/v=([a-zA-Z0-9_-]+)/);
+      videoId = match ? match[1] : '';
+    }
+
+    // If we found a video ID, return the embed URL
+    if (videoId) {
+      return `https://www.youtube.com/embed/${videoId}`;
+    }
+
+    // If no video ID found, return original URL (likely won't work as embed)
+    return url;
+  };
 
   useEffect(() => {
     const fetchCourseAndReviews = async () => {
@@ -104,11 +142,7 @@ export default function CourseDetail({ params: awaitedParams }: { params: Promis
   }, [params.id])
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-slate-600">Loading course...</p>
-      </div>
-    )
+    return <RhythmicLoading />;
   }
 
   if (error || !course) {
@@ -139,17 +173,35 @@ export default function CourseDetail({ params: awaitedParams }: { params: Promis
           <div className="lg:col-span-2">
             {/* Video Player */}
             <div className="relative w-full rounded-lg overflow-hidden mb-8">
-              {course.video_url && course.video_url.includes("youtube.com/embed") ? (
-                <iframe
-                  width="100%"
-                  height="400"
-                  src={course.video_url}
-                  title={course.title}
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="rounded-lg"
-                />
+              {course.video_url ? (
+                // Check if it's a YouTube URL in any format and convert to embed format
+                course.video_url.includes("youtube.com") || course.video_url.includes("youtu.be") ? (
+                  <iframe
+                    width="100%"
+                    height="400"
+                    src={getYouTubeEmbedUrl(course.video_url)}
+                    title={course.title}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="rounded-lg"
+                  />
+                ) : (
+                  // For non-YouTube videos, use a generic video player or placeholder
+                  <div
+                    className="relative w-full bg-black rounded-lg overflow-hidden aspect-video flex items-center justify-center"
+                    style={{
+                      backgroundImage: `url(${course.image_url})`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                    }}
+                  >
+                    <div className="absolute inset-0 bg-black/30" />
+                    <button className="relative bg-white text-black rounded-full p-4 hover:bg-slate-100 transition">
+                      <Play className="w-8 h-8 fill-current" />
+                    </button>
+                  </div>
+                )
               ) : (
                 <div
                   className="relative w-full bg-black rounded-lg overflow-hidden aspect-video flex items-center justify-center"

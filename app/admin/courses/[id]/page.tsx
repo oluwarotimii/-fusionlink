@@ -21,6 +21,7 @@ import {
   DialogFooter,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import ImageUpload from "@/components/ImageUpload"
 
 interface Course {
   id: number
@@ -51,6 +52,7 @@ export default function EditCoursePage() {
   const router = useRouter()
 
   const [formData, setFormData] = useState<Course | null>(null)
+  const [imageFile, setImageFile] = useState<File | null>(null)
 
   const [categories, setCategories] = useState<{ id: number; name: string }[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -95,6 +97,29 @@ export default function EditCoursePage() {
     }
   };
 
+  const uploadImage = async (file: File): Promise<string | null> => {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        return result.url; // Return the URL of the uploaded image
+      } else {
+        console.error('Image upload failed');
+        return null;
+      }
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      return null;
+    }
+  };
+
   const handleAddCategory = async (e: React.FormEvent) => {
     e.preventDefault();
     setCategoryError("");
@@ -128,6 +153,8 @@ export default function EditCoursePage() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     if (!formData) return
     const { name, value } = e.target
+    // Don't update image_url from input field since we'll handle it separately
+    if (name === 'image_url') return;
     setFormData((prev) =>
       prev
         ? {
@@ -157,18 +184,41 @@ export default function EditCoursePage() {
     setSuccess("")
 
     try {
-      const response = await fetch(`/api/courses/${courseId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, image_url: null }), // Set image_url to null as it's no longer used
-      })
+      if (imageFile) {
+        // Upload the image file and get the URL
+        const imageUrl = await uploadImage(imageFile);
+        if (imageUrl) {
+          // Update the form data with the new image URL
+          const updatedFormData = { ...formData, image_url: imageUrl };
+          const response = await fetch(`/api/courses/${courseId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(updatedFormData),
+          });
 
-      if (response.ok) {
-        setSuccess("Course updated successfully!")
-        setTimeout(() => router.push("/admin/courses"), 2000)
+          if (response.ok) {
+            setSuccess("Course updated successfully!")
+            setTimeout(() => router.push("/admin/courses"), 2000)
+          } else {
+            const data = await response.json()
+            setError(data.error || "Failed to update course")
+          }
+        }
       } else {
-        const data = await response.json()
-        setError(data.error || "Failed to update course")
+        // If no new image was uploaded, just update other fields
+        const response = await fetch(`/api/courses/${courseId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
+
+        if (response.ok) {
+          setSuccess("Course updated successfully!")
+          setTimeout(() => router.push("/admin/courses"), 2000)
+        } else {
+          const data = await response.json()
+          setError(data.error || "Failed to update course")
+        }
       }
     } catch (err) {
       setError("An error occurred. Please try again.")
@@ -179,11 +229,7 @@ export default function EditCoursePage() {
   }
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <p className="text-slate-600">Loading course...</p>
-      </div>
-    )
+    return <RhythmicLoading />;
   }
 
   if (!formData) {
@@ -243,12 +289,12 @@ export default function EditCoursePage() {
             {/* Pricing */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Price ($)</label>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Price (₦)</label>
                 <Input name="price" type="number" value={formData.price} onChange={handleChange} step="0.01" required />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Original Price ($)</label>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Original Price (₦)</label>
                 <Input
                   name="original_price"
                   type="number"
@@ -334,8 +380,11 @@ export default function EditCoursePage() {
             {/* Media URLs */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Course Image URL</label>
-                <Input name="image_url" value={formData.image_url} onChange={handleChange} />
+                <ImageUpload
+                  onImageChange={setImageFile}
+                  currentImageUrl={formData.image_url}
+                  label="Course Image"
+                />
               </div>
 
               <div>
