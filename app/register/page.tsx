@@ -72,69 +72,70 @@ export default function RegisterPage() {
           <h1 className="text-3xl font-bold text-slate-900 mb-2">Create Account</h1>
           <p className="text-slate-600 mb-8">Join FSL to explore amazing courses</p>
 
-        <form onSubmit={handleRegister} className="space-y-4">
-          {error && <div className="bg-red-100 text-red-700 p-3 rounded text-sm">{error}</div>}
+          <form onSubmit={handleRegister} className="space-y-4">
+            {error && <div className="bg-red-100 text-red-700 p-3 rounded text-sm">{error}</div>}
 
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">Email</label>
-            <Input
-              type="email"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Email</label>
+              <Input
+                type="email"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">Username</label>
-            <Input
-              type="text"
-              placeholder="Choose a username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-          </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Username</label>
+              <Input
+                type="text"
+                placeholder="Choose a username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">Password</label>
-            <Input
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Password</label>
+              <Input
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">Confirm Password</label>
-            <Input
-              type="password"
-              placeholder="••••••••"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
-          </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Confirm Password</label>
+              <Input
+                type="password"
+                placeholder="••••••••"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
+            </div>
 
-          <Button
-            type="submit"
-            className="w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3"
-            disabled={loading}
-          >
-            {loading ? "Creating Account..." : "Register"}
-          </Button>
-        </form>
+            <Button
+              type="submit"
+              className="w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3"
+              disabled={loading}
+            >
+              {loading ? "Creating Account..." : "Register"}
+            </Button>
+          </form>
 
-        <p className="text-sm text-slate-600 mt-6 text-center">
-          Already have an account?{" "}
-          <Link href="/" className="text-teal-600 hover:underline font-semibold">
-            Browse Courses
-          </Link>
-        </p>
-      </Card>
+          <p className="text-sm text-slate-600 mt-6 text-center">
+            Already have an account?{" "}
+            <Link href="/" className="text-teal-600 hover:underline font-semibold">
+              Browse Courses
+            </Link>
+          </p>
+        </Card>
+      </div>
     </div>
   )
 }

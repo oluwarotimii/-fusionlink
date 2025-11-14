@@ -120,56 +120,58 @@ export default function CoursesManager() {
             </Link>
           </Card>
         ) : (
-          <Card className="overflow-hidden">
-            <table className="w-full">
-              <thead className="bg-slate-100 border-b">
-                <tr>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">Title</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">Instructor</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">Category</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">Price</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">Status</th>
-                  <th className="px-6 py-4 text-center text-sm font-semibold text-slate-900">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y">
-                {filteredCourses.map((course) => (
-                  <tr key={course.id} className="hover:bg-slate-50">
-                    <td className="px-6 py-4 text-sm text-slate-900 font-medium">{course.title}</td>
-                    <td className="px-6 py-4 text-sm text-slate-600">{course.instructor_name}</td>
-                    <td className="px-6 py-4 text-sm text-slate-600">{course.category}</td>
-                    <td className="px-6 py-4 text-sm font-semibold text-slate-900">
-                      ${course.price ? Number(course.price).toFixed(2) : "0.00"}
-                    </td>
-                    <td className="px-6 py-4">
-                      <span
-                        className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
-                          course.is_active ? "bg-green-100 text-green-700" : "bg-slate-100 text-slate-700"
-                        }`}
-                      >
-                        {course.is_active ? "Active" : "Inactive"}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-center">
-                      <div className="flex justify-center gap-2">
-                        <Link href={`/admin/courses/${course.id}`}>
-                          <button className="p-2 text-blue-600 hover:bg-blue-50 rounded">
-                            <Edit2 className="w-4 h-4" />
-                          </button>
-                        </Link>
-                        <button
-                          onClick={() => deleteCourse(course.id)}
-                          className="p-2 text-red-600 hover:bg-red-50 rounded"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </td>
+          <div className="overflow-x-auto">
+            <Card className="overflow-hidden min-w-full sm:min-w-0">
+              <table className="w-full">
+                <thead className="bg-slate-100 border-b">
+                  <tr>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-slate-900 sm:px-6 sm:py-4">Title</th>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-slate-900 sm:px-6 sm:py-4">Instructor</th>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-slate-900 sm:px-6 sm:py-4">Category</th>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-slate-900 sm:px-6 sm:py-4">Price</th>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-slate-900 sm:px-6 sm:py-4">Status</th>
+                    <th className="px-4 py-3 text-center text-sm font-semibold text-slate-900 sm:px-6 sm:py-4">Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </Card>
+                </thead>
+                <tbody className="divide-y">
+                  {filteredCourses.map((course) => (
+                    <tr key={course.id} className="hover:bg-slate-50">
+                      <td className="px-4 py-3 text-sm text-slate-900 font-medium sm:px-6 sm:py-4">{course.title}</td>
+                      <td className="px-4 py-3 text-sm text-slate-600 sm:px-6 sm:py-4">{course.instructor_name}</td>
+                      <td className="px-4 py-3 text-sm text-slate-600 sm:px-6 sm:py-4">{course.category}</td>
+                      <td className="px-4 py-3 text-sm font-semibold text-slate-900 sm:px-6 sm:py-4">
+                        ₦{course.price ? Number(course.price).toFixed(2) : "0.00"}
+                      </td>
+                      <td className="px-4 py-3 sm:px-6 sm:py-4">
+                        <span
+                          className={`inline-block px-2 py-1 rounded-full text-xs font-semibold sm:px-3 sm:py-1 ${
+                            course.is_active ? "bg-green-100 text-green-700" : "bg-slate-100 text-slate-700"
+                          }`}
+                        >
+                          {course.is_active ? "Active" : "Inactive"}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 text-center sm:px-6 sm:py-4">
+                        <div className="flex justify-center gap-1 sm:gap-2">
+                          <Link href={`/admin/courses/${course.id}`}>
+                            <button className="p-2 text-blue-600 hover:bg-blue-50 rounded sm:p-2">
+                              <Edit2 className="w-4 h-4" />
+                            </button>
+                          </Link>
+                          <button
+                            onClick={() => deleteCourse(course.id)}
+                            className="p-2 text-red-600 hover:bg-red-50 rounded sm:p-2"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </Card>
+          </div>
         )}
       </div>
     </div>

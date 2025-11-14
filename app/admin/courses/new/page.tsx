@@ -19,6 +19,7 @@ import {
   DialogFooter,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import ImageUpload from "@/components/ImageUpload"
 
 export default function NewCoursePage() {
   const [loading, setLoading] = useState(false)
@@ -39,12 +40,31 @@ export default function NewCoursePage() {
     total_lectures: "",
     language: "English",
   })
+  const [imageFile, setImageFile] = useState<File | null>(null)
 
   const [categories, setCategories] = useState<{ id: number; name: string }[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
   const [categoryError, setCategoryError] = useState("");
   const [addingCategory, setAddingCategory] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target
+    // Don't update image_url from input field since we'll handle it separately
+    if (name === 'image_url') return;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: [
+        "price",
+        "original_price",
+        "discount_percentage",
+        "duration_hours",
+        "total_lectures",
+      ].includes(name)
+        ? value === "" ? "" : Number.parseFloat(value)
+        : value,
+    }));
+  };
 
   useEffect(() => {
     fetchCategories();
@@ -92,6 +112,68 @@ export default function NewCoursePage() {
       console.error("Error adding category:", err);
     } finally {
       setAddingCategory(false);
+    }
+  };
+
+  const uploadImage = async (file: File): Promise<string | null> => {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        return result.url; // Return the URL of the uploaded image
+      } else {
+        console.error('Image upload failed');
+        return null;
+      }
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      return null;
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    setLoading(true);
+    setError("");
+
+    try {
+      let imageUrl = formData.image_url; // default to current placeholder
+
+      if (imageFile) {
+        // Upload the image file and get the URL
+        const uploadedImageUrl = await uploadImage(imageFile);
+        if (uploadedImageUrl) {
+          imageUrl = uploadedImageUrl;
+        }
+      }
+
+      // Create course with the image URL
+      const courseData = { ...formData, image_url: imageUrl };
+      const response = await fetch('/api/courses', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(courseData),
+      });
+
+      if (response.ok) {
+        router.push('/admin/courses');
+      } else {
+        const data = await response.json();
+        setError(data.error || 'Failed to create course');
+      }
+    } catch (err) {
+      setError('An error occurred. Please try again.');
+      console.error('Error creating course:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -167,7 +249,7 @@ export default function NewCoursePage() {
             {/* Pricing */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Price ($)</label>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Price (₦)</label>
                 <Input
                   name="price"
                   type="number"
@@ -180,7 +262,7 @@ export default function NewCoursePage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Original Price ($)</label>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Original Price (₦)</label>
                 <Input
                   name="original_price"
                   type="number"
@@ -268,8 +350,11 @@ export default function NewCoursePage() {
             {/* Media URLs */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Course Image URL</label>
-                <Input name="image_url" value={formData.image_url} onChange={handleChange} placeholder="Image URL" />
+                <ImageUpload
+                  onImageChange={setImageFile}
+                  currentImageUrl={formData.image_url}
+                  label="Course Image"
+                />
               </div>
 
               <div>
