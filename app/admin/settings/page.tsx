@@ -182,6 +182,7 @@ export default function AdminSettingsPage() {
             </Button>
           </form>
         </Card>
+      </div>
     </div>
   );
 }

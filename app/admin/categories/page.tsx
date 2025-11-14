@@ -202,6 +202,7 @@ export default function CategoriesManager() {
             </div>
           )}
         </Card>
+      </div>
     </div>
   );
 }
