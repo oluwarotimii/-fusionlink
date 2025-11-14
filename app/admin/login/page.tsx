@@ -120,11 +120,7 @@ export default function AdminLogin() {
           </form>
 
           <p className="text-sm text-slate-600 mt-6 text-center">
-            <span className="font-semibold">Demo Credentials:</span>
-            <br />
-            Email: admin@fsl.com
-            <br />
-            Password: admin123
+            Contact your system administrator for login credentials
           </p>
         </Card>
       </div>
