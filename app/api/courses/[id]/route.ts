@@ -2,30 +2,59 @@ import { sql } from "@/lib/db";
 
 export async function GET(request: Request, { params: awaitedParams }: { params: Promise<{ id: string }> }) {
   try {
+    console.log("[COURSE API] Request received for course endpoint");
+    console.log("[COURSE API] Request URL:", request.url);
+    console.log("[COURSE API] Request method:", request.method);
+    console.log("[COURSE API] Raw params object:", awaitedParams);
+
     const params = await awaitedParams;
-    console.log("Fetching course by ID:", params.id)
+    console.log("[COURSE API] Parsed params:", params);
+    console.log("[COURSE API] Fetching course by ID:", params.id);
+    console.log("[COURSE API] Type of params.id:", typeof params.id);
 
     // Validate that the ID is a number
     const courseId = Number.parseInt(params.id, 10);
+    console.log("[COURSE API] Attempting to parse ID:", params.id, "to number:", courseId);
+
     if (isNaN(courseId)) {
-      console.log("Invalid course ID:", params.id)
-      return Response.json({ error: "Invalid course ID" }, { status: 400 })
+      console.log("[COURSE API] Invalid course ID detected:", params.id, "is NaN:", isNaN(courseId));
+      return Response.json({ error: "Invalid course ID" }, { status: 400, headers: { "Content-Type": "application/json" } })
     }
 
-    console.log("Parsed courseId:", courseId)
+    console.log("[COURSE API] Parsed courseId:", courseId, "Type:", typeof courseId);
+    console.log("[COURSE API] Executing database query for ID:", courseId);
+
     const courses = await sql`SELECT * FROM courses WHERE id = ${courseId}`
-    console.log("Database query result:", courses)
+    console.log("[COURSE API] Database query executed successfully");
+    console.log("[COURSE API] Raw database result:", JSON.stringify(courses, null, 2));
+    console.log("[COURSE API] Number of results found:", courses.length);
 
     if (courses.length === 0) {
-      console.log("Course not found for ID:", courseId)
-      return Response.json({ error: "Course not found" }, { status: 404 })
+      console.log("[COURSE API] No course found for ID:", courseId);
+      console.log("[COURSE API] Returning 404 response");
+      return Response.json({ error: "Course not found" }, { status: 404, headers: { "Content-Type": "application/json" } })
     }
 
-    console.log("Course fetched successfully:", courses[0])
-    return Response.json(courses[0])
+    console.log("[COURSE API] Course found:", JSON.stringify(courses[0], null, 2));
+    console.log("[COURSE API] Returning success response with course data");
+
+    const response = Response.json(courses[0], { headers: { "Content-Type": "application/json" } });
+    console.log("[COURSE API] Response object created:", response.status);
+    return response;
   } catch (error) {
-    console.error("Database error:", error)
-    return Response.json({ message: "Server error. Please try again later.", error: String(error) }, { status: 500 })
+    console.error("[COURSE API] Database error occurred:", error);
+    console.error("[COURSE API] Error name:", (error as Error).name);
+    console.error("[COURSE API] Error message:", (error as Error).message);
+    console.error("[COURSE API] Error stack:", (error as Error).stack);
+
+    return Response.json({
+      message: "Server error. Please try again later.",
+      error: String(error),
+      errorType: (error as Error).name || 'UnknownError'
+    }, {
+      status: 500,
+      headers: { "Content-Type": "application/json" }
+    })
   }
 }
 
