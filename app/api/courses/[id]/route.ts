@@ -3,28 +3,28 @@ import { sql } from "@/lib/db";
 export async function GET(request: Request, { params: awaitedParams }: { params: Promise<{ id: string }> }) {
   try {
     const params = await awaitedParams;
-    console.log(" Fetching course by ID:", params.id)
+    console.log("Fetching course by ID:", params.id)
 
     // Validate that the ID is a number
     const courseId = Number.parseInt(params.id, 10);
     if (isNaN(courseId)) {
-      console.log(" Invalid course ID:", params.id)
+      console.log("Invalid course ID:", params.id)
       return Response.json({ error: "Invalid course ID" }, { status: 400 })
     }
 
     console.log("Parsed courseId:", courseId)
     const courses = await sql`SELECT * FROM courses WHERE id = ${courseId}`
-    console.log(" Database query result:", courses)
+    console.log("Database query result:", courses)
 
     if (courses.length === 0) {
       console.log("Course not found for ID:", courseId)
       return Response.json({ error: "Course not found" }, { status: 404 })
     }
 
-    console.log(" Course fetched successfully:", courses[0])
+    console.log("Course fetched successfully:", courses[0])
     return Response.json(courses[0])
   } catch (error) {
-    console.error(" Database error:", error)
+    console.error("Database error:", error)
     return Response.json({ message: "Server error. Please try again later.", error: String(error) }, { status: 500 })
   }
 }
