@@ -95,46 +95,82 @@ export default function CourseDetail({ params }: { params: Promise<{ id: string 
       try {
         setLoading(true)
         setError(null)
-        console.log("Attempting to fetch course with ID:", id);
+        console.log("[COURSE PAGE] Attempting to fetch course with ID:", id);
+        console.log("[COURSE PAGE] Fetching from URL:", `/api/courses/${id}`);
+
         const [courseRes, reviewsRes] = await Promise.all([
           fetch(`/api/courses/${id}`),
           fetch(`/api/reviews/${id}`),
         ])
 
-        console.log("Course API response status:", courseRes.status);
-        console.log("Course API response headers:", courseRes.headers);
+        console.log("[COURSE PAGE] Course API response status:", courseRes.status);
+        console.log("[COURSE PAGE] Course API response headers:", [...courseRes.headers.entries()]);
+        console.log("[COURSE PAGE] Course API response URL:", courseRes.url);
+
+        // Check if response is actually JSON before parsing
+        const courseContentType = courseRes.headers.get('content-type');
+        console.log("[COURSE PAGE] Course response content-type:", courseContentType);
 
         if (!courseRes.ok) {
-          const errorData = await courseRes.json()
-          console.log("API error response:", errorData);
-          setError(errorData?.error || "Failed to load course. Please try again later.")
-        } else {
-          const courseData = await courseRes.json()
-          console.log("Raw course data received:", courseData);
-          console.log("Course data type:", typeof courseData);
-          console.log("Course data keys:", Object.keys(courseData || {}));
-
-          if (!courseData || (typeof courseData === 'object' && Object.keys(courseData).length === 0)) {
-            console.log("Course data is empty!");
-            setError("Course data is empty from the server.")
-          } else if (courseData.error) {
-            console.log("API returned error in body:", courseData.error);
-            setError(courseData.error)
+          // Try to handle different response types
+          if (courseContentType && courseContentType.includes('application/json')) {
+            const errorData = await courseRes.json();
+            console.log("[COURSE PAGE] JSON API error response:", errorData);
+            setError(errorData?.error || "Failed to load course. Please try again later.");
           } else {
-            console.log("Course loaded successfully:", courseData);
-            setCourse(courseData)
+            // The response is likely HTML (like a 404 page)
+            const errorText = await courseRes.text();
+            console.log("[COURSE PAGE] Non-JSON API error response:", errorText.substring(0, 200) + "...");
+            setError(`Failed to load course (status: ${courseRes.status}). Please try again later.`);
+          }
+        } else {
+          // Check content type before parsing JSON
+          if (courseContentType && courseContentType.includes('application/json')) {
+            const courseData = await courseRes.json()
+            console.log("[COURSE PAGE] Raw course data received:", courseData);
+            console.log("[COURSE PAGE] Course data type:", typeof courseData);
+            console.log("[COURSE PAGE] Course data keys:", Object.keys(courseData || {}));
+
+            if (!courseData || (typeof courseData === 'object' && Object.keys(courseData).length === 0)) {
+              console.log("[COURSE PAGE] Course data is empty!");
+              setError("Course data is empty from the server.");
+            } else if (courseData.error) {
+              console.log("[COURSE PAGE] API returned error in body:", courseData.error);
+              setError(courseData.error)
+            } else {
+              console.log("[COURSE PAGE] Course loaded successfully:", courseData);
+              setCourse(courseData)
+            }
+          } else {
+            // Response was not JSON, likely an HTML error page
+            const responseText = await courseRes.text();
+            console.log("[COURSE PAGE] Expected JSON but got HTML/text:", responseText.substring(0, 200) + "...");
+            setError("Server returned unexpected response format.");
           }
         }
 
-        if (reviewsRes.ok) {
+        // Handle reviews response similarly
+        const reviewsContentType = reviewsRes.headers.get('content-type');
+        console.log("[COURSE PAGE] Reviews API response status:", reviewsRes.status);
+        console.log("[COURSE PAGE] Reviews response content-type:", reviewsContentType);
+
+        if (reviewsRes.ok && reviewsContentType && reviewsContentType.includes('application/json')) {
           const reviewsData = await reviewsRes.json()
+          console.log("[COURSE PAGE] Reviews data received:", reviewsData.length, "reviews");
           setReviews(reviewsData)
+        } else if (!reviewsRes.ok) {
+          console.log("[COURSE PAGE] Reviews API error, status:", reviewsRes.status);
+          // Optionally load empty array or handle error
+          setReviews([])
         } else {
-          console.log("Reviews API response status:", reviewsRes.status);
+          console.log("[COURSE PAGE] Reviews response not JSON, got:", await reviewsRes.text());
+          setReviews([])
         }
       } catch (error) {
-        console.error("Error fetching data:", error)
-        setError("Server error. Please try again later.")
+        console.error("[COURSE PAGE] Error fetching data:", error)
+        console.error("[COURSE PAGE] Error name:", (error as Error).name);
+        console.error("[COURSE PAGE] Error message:", (error as Error).message);
+        setError("Server error. Please try again later." + " (" + (error as Error).message + ")");
       } finally {
         setLoading(false)
       }
@@ -142,9 +178,13 @@ export default function CourseDetail({ params }: { params: Promise<{ id: string 
 
     const fetchBankDetails = async () => {
       try {
+        console.log("[COURSE PAGE] Fetching bank details from /api/admin/settings");
         const response = await fetch("/api/admin/settings");
+        console.log("[COURSE PAGE] Bank settings response status:", response.status);
+
         if (response.ok) {
           const data = await response.json();
+          console.log("[COURSE PAGE] Bank settings received:", data);
           setBankDetails({
             bank_name: data.bank_name || "",
             account_number: data.account_number || "",
@@ -152,9 +192,11 @@ export default function CourseDetail({ params }: { params: Promise<{ id: string 
             whatsapp_number: data.whatsapp_number || "",
             whatsapp_enabled: data.whatsapp_enabled || false,
           });
+        } else {
+          console.log("[COURSE PAGE] Failed to fetch bank settings, status:", response.status);
         }
       } catch (error) {
-        console.error("Error fetching bank details:", error);
+        console.error("[COURSE PAGE] Error fetching bank details:", error);
       }
     };
 
