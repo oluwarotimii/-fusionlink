@@ -4,8 +4,8 @@ import type { NextRequest } from "next/server"
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // Protect admin routes
-  if (pathname.startsWith("/admin") && !pathname.startsWith("/admin/login")) {
+  // Protect admin routes except login page
+  if (pathname.startsWith("/admin") && pathname !== "/admin/login" && !pathname.startsWith("/admin/login")) {
     const token = request.cookies.get("auth_token")?.value
 
     if (!token) {

@@ -48,15 +48,15 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
   const handleLogout = () => {
     document.cookie = "auth_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-    router.push("/");
+    router.push("/admin/login");
   };
 
   const menuItems = [
-    { id: "dashboard", label: "Dashboard", icon: BarChart3, path: "/admin" },
-    { id: "courses", label: "Courses", icon: BookOpen, path: "/admin/courses" },
-    { id: "categories", label: "Categories", icon: Tag, path: "/admin/categories" },
-    { id: "change-password", label: "Change Password", icon: KeyRound, path: "/admin/change-password" },
-    { id: "settings", label: "Settings", icon: Settings, path: "/admin/settings" },
+    { id: "dashboard", label: "Dashboard", icon: BarChart3, path: "/admin/dashboard" },
+    { id: "courses", label: "Courses", icon: BookOpen, path: "/admin/dashboard/courses" },
+    { id: "categories", label: "Categories", icon: Tag, path: "/admin/dashboard/categories" },
+    { id: "change-password", label: "Change Password", icon: KeyRound, path: "/admin/dashboard/change-password" },
+    { id: "settings", label: "Settings", icon: Settings, path: "/admin/dashboard/settings" },
   ];
 
   return (

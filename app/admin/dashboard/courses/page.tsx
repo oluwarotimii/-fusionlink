@@ -77,7 +77,7 @@ export default function CoursesManager() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header with back button for mobile */}
         <div className="mb-6 lg:hidden">
-          <Link href="/admin">
+          <Link href="/admin/dashboard">
             <button className="p-2 hover:bg-slate-100 rounded mb-4">
               <ArrowLeft className="w-5 h-5" />
             </button>
@@ -87,7 +87,7 @@ export default function CoursesManager() {
 
         {/* Action buttons */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-          <Link href="/admin/courses/new">
+          <Link href="/admin/dashboard/courses/new">
             <Button className="bg-teal-500 hover:bg-teal-600 text-white w-full sm:w-auto">
               <Plus className="w-5 h-5 mr-2" />
               Add Course
@@ -114,7 +114,7 @@ export default function CoursesManager() {
             <p className="text-slate-600 mb-4">
               {searchTerm ? "No courses found matching your search" : "No courses found"}
             </p>
-            <Link href="/admin/courses/new">
+            <Link href="/admin/dashboard/courses/new">
               <Button className="bg-teal-500 hover:bg-teal-600 text-white">Create First Course</Button>
             </Link>
           </Card>
@@ -152,7 +152,7 @@ export default function CoursesManager() {
                       </td>
                       <td className="px-4 py-3 text-center sm:px-6 sm:py-4">
                         <div className="flex justify-center gap-1 sm:gap-2">
-                          <Link href={`/admin/courses/${course.id}`}>
+                          <Link href={`/admin/dashboard/courses/${course.id}`}>
                             <button className="p-2 text-blue-600 hover:bg-blue-50 rounded sm:p-2">
                               <Edit2 className="w-4 h-4" />
                             </button>

@@ -45,7 +45,7 @@ export default function AdminLogin() {
       console.log("Login response data:", data)
 
       if (response.ok) {
-        router.push("/admin")
+        router.push("/admin/dashboard")
       } else {
         setError(data.message || "Login failed. Please check your credentials.")
       }
