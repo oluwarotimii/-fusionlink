@@ -33,7 +33,8 @@ interface Review {
   comment: string
 }
 
-export default function CourseDetail({ params }: { params: { id: string } }) {
+export default function CourseDetail({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
   const [course, setCourse] = useState<Course | null>(null)
   const [reviews, setReviews] = useState<Review[]>([])
   const [loading, setLoading] = useState(true)
@@ -86,7 +87,7 @@ export default function CourseDetail({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     const fetchCourseAndReviews = async () => {
-      if (!params.id) {
+      if (!id) {
         setError("Course ID is missing.");
         setLoading(false);
         return;
@@ -94,10 +95,10 @@ export default function CourseDetail({ params }: { params: { id: string } }) {
       try {
         setLoading(true)
         setError(null)
-        console.log("Attempting to fetch course with ID:", params.id);
+        console.log("Attempting to fetch course with ID:", id);
         const [courseRes, reviewsRes] = await Promise.all([
-          fetch(`/api/courses/${params.id}`),
-          fetch(`/api/reviews/${params.id}`),
+          fetch(`/api/courses/${id}`),
+          fetch(`/api/reviews/${id}`),
         ])
 
         console.log("Course API response status:", courseRes.status);
@@ -159,7 +160,7 @@ export default function CourseDetail({ params }: { params: { id: string } }) {
 
     fetchCourseAndReviews();
     fetchBankDetails();
-  }, [params.id])
+  }, [id])
 
   if (loading) {
     return <RhythmicLoading />;
