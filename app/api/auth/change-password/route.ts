@@ -1,8 +1,6 @@
-import { neon } from "@neondatabase/serverless"
+import { sql } from "@/lib/db";
 import crypto from "crypto"
 import { cookies } from "next/headers"
-
-const sql = neon(process.env.DATABASE_URL!)
 
 function hashPassword(password: string): string {
   return crypto
@@ -25,7 +23,7 @@ export async function POST(request: Request) {
     // Decode token to get user email
     const userEmail = JSON.parse(Buffer.from(token, "base64").toString()).email
 
-    const users = await sql("SELECT * FROM users WHERE email = $1", [userEmail])
+    const users = await sql`SELECT * FROM users WHERE email = ${userEmail}`
     if (users.length === 0) {
       return Response.json({ message: "User not found" }, { status: 404 })
     }
@@ -36,7 +34,7 @@ export async function POST(request: Request) {
     }
 
     const newHash = hashPassword(newPassword)
-    await sql("UPDATE users SET password_hash = $1 WHERE email = $2", [newHash, userEmail])
+    await sql`UPDATE users SET password_hash = ${newHash} WHERE email = ${userEmail}`
 
     return Response.json({ message: "Password changed successfully" })
   } catch (error) {

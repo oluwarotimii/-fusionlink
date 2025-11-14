@@ -1,7 +1,5 @@
-import { neon } from "@neondatabase/serverless"
+import { sql } from "@/lib/db";
 import crypto from "crypto"
-
-const sql = neon(process.env.DATABASE_URL!)
 
 function hashPassword(password: string): string {
   return crypto
@@ -113,31 +111,13 @@ export async function POST() {
     ]
 
     for (const course of courses) {
-      await sql(
-        `INSERT INTO courses (
+      await sql`INSERT INTO courses (
           title, description, instructor_name, instructor_image_url,
           price, original_price, discount_percentage, category,
           image_url, video_url, duration_hours, total_lectures,
           total_sections, language, is_active
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, true)
-        ON CONFLICT DO NOTHING`,
-        [
-          course.title,
-          course.description,
-          course.instructor_name,
-          course.instructor_image_url,
-          course.price,
-          course.original_price,
-          course.discount_percentage,
-          course.category,
-          course.image_url,
-          course.video_url,
-          course.duration_hours,
-          course.total_lectures,
-          course.total_sections,
-          course.language,
-        ],
-      )
+        ) VALUES (${course.title}, ${course.description}, ${course.instructor_name}, ${course.instructor_image_url}, ${course.price}, ${course.original_price}, ${course.discount_percentage}, ${course.category}, ${course.image_url}, ${course.video_url}, ${course.duration_hours}, ${course.total_lectures}, ${course.total_sections}, ${course.language}, true)
+        ON CONFLICT (title) DO NOTHING`
     }
 
     // Insert sample reviews
@@ -168,14 +148,11 @@ export async function POST() {
     ]
 
     for (const review of reviews) {
-      const courses_result = await sql("SELECT id FROM courses WHERE title = $1", [review.course_title])
+      const courses_result = await sql`SELECT id FROM courses WHERE title = ${review.course_title}`
       if (courses_result.length > 0) {
-        await sql(
-          `INSERT INTO reviews (
+        await sql`INSERT INTO reviews (
             course_id, reviewer_name, reviewer_avatar_url, rating, comment
-          ) VALUES ($1, $2, $3, $4, $5)`,
-          [courses_result[0].id, review.reviewer_name, review.reviewer_avatar_url, review.rating, review.comment],
-        )
+          ) VALUES (${courses_result[0].id}, ${review.reviewer_name}, ${review.reviewer_avatar_url}, ${review.rating}, ${review.comment})`
       }
     }
 

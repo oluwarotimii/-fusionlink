@@ -1,17 +1,15 @@
-import { neon } from "@neondatabase/serverless"
-
-const sql = neon(process.env.DATABASE_URL!)
+import { sql } from "@/lib/db";
 
 export async function GET() {
   try {
     console.log("Fetching courses from database...")
     const courses = await sql`
-      SELECT id, title, description, instructor_name, instructor_image_url, 
-             price, original_price, discount_percentage, category, 
-             image_url, video_url, duration_hours, total_lectures, 
-             total_sections, total_students, language, is_featured, is_active 
-      FROM courses 
-      WHERE is_active = true 
+      SELECT id, title, description, instructor_name, instructor_image_url,
+             price, original_price, discount_percentage, category,
+             image_url, video_url, duration_hours, total_lectures,
+             total_sections, total_students, language, is_featured, is_active
+      FROM courses
+      WHERE is_active = true
       ORDER BY is_featured DESC, created_at DESC
     `
     console.log("Courses fetched successfully:", courses.length)
