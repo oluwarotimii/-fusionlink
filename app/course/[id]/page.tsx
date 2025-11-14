@@ -95,21 +95,28 @@ export default function CourseDetail({ params: awaitedParams }: { params: Promis
       try {
         setLoading(true)
         setError(null)
+        console.log("Attempting to fetch course with ID:", params.id);
         const [courseRes, reviewsRes] = await Promise.all([
           fetch(`/api/courses/${params.id}`),
           fetch(`/api/reviews/${params.id}`),
         ])
 
-        if (courseRes.ok) {
+        console.log("Course API response status:", courseRes.status);
+        if (courseRes.status === 404) {
+          setError("Course not found in the database. Please try another course.");
+        } else if (courseRes.ok) {
           const courseData = await courseRes.json()
+          console.log("Course data received:", courseData);
           setCourse(courseData)
         } else {
-          setError("Course not found. Please try again later.")
+          setError("Failed to load course. Please try again later.")
         }
 
         if (reviewsRes.ok) {
           const reviewsData = await reviewsRes.json()
           setReviews(reviewsData)
+        } else {
+          console.log("Reviews API response status:", reviewsRes.status);
         }
       } catch (error) {
         console.error("Error fetching data:", error)

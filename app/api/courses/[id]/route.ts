@@ -1,12 +1,18 @@
-import { neon } from "@neondatabase/serverless"
-
-const sql = neon(process.env.DATABASE_URL!)
+import { sql } from "@/lib/db";
 
 export async function GET(request: Request, { params: awaitedParams }: { params: Promise<{ id: string }> }) {
   try {
     const params = await awaitedParams;
     console.log("Fetching course:", params.id)
-    const courses = await sql`SELECT * FROM courses WHERE id = ${Number.parseInt(params.id)}`
+
+    // Validate that the ID is a number
+    const courseId = Number.parseInt(params.id, 10);
+    if (isNaN(courseId)) {
+      console.log("Invalid course ID:", params.id)
+      return Response.json({ error: "Invalid course ID" }, { status: 400 })
+    }
+
+    const courses = await sql`SELECT * FROM courses WHERE id = ${courseId}`
 
     if (courses.length === 0) {
       console.log("Course not found:", params.id)
