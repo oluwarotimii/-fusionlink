@@ -17,7 +17,7 @@ const RhythmicLoading = () => {
           ))}
         </div>
 
-        <p className="text-slate-600 font-medium">Loading course...</p>
+        <p className="text-slate-600 font-medium">Loading...</p>
       </div>
 
       {/* CSS for bounce animation */}

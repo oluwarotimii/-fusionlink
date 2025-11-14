@@ -22,30 +22,59 @@ interface Course {
   duration_hours: number
 }
 
+interface Category {
+  id: number
+  name: string
+  created_at: string
+}
+
 export default function Home() {
   const [courses, setCourses] = useState<Course[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
   const [filteredCourses, setFilteredCourses] = useState<Course[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("All")
 
   useEffect(() => {
-    fetchCourses()
+    fetchCoursesAndCategories()
   }, [])
 
   useEffect(() => {
     filterCourses()
   }, [searchTerm, selectedCategory, courses])
 
-  const fetchCourses = async () => {
+  const fetchCoursesAndCategories = async () => {
     try {
       setLoading(true)
-      const response = await fetch("/api/courses")
-      const data = await response.json()
-      setCourses(data)
-      setFilteredCourses(data)
+      // Fetch both courses and categories simultaneously
+      const [coursesResponse, categoriesResponse] = await Promise.all([
+        fetch("/api/courses"),
+        fetch("/api/admin/categories")
+      ])
+
+      if (coursesResponse.ok) {
+        const coursesData = await coursesResponse.json()
+        setCourses(coursesData)
+        setFilteredCourses(coursesData)
+      } else {
+        console.error("Error fetching courses:", coursesResponse.status)
+      }
+
+      if (categoriesResponse.ok) {
+        const categoriesData = await categoriesResponse.json()
+        // Add "All" category at the beginning
+        const allCategories = [{ id: 0, name: "All", created_at: "" }, ...categoriesData]
+        setCategories(allCategories)
+      } else {
+        console.error("Error fetching categories:", categoriesResponse.status)
+        // Fallback to unique categories from courses if API fails
+        const uniqueCategories = Array.from(new Set(courses.map((c) => c.category)))
+        const allCategories = [{ id: 0, name: "All", created_at: "" }, ...uniqueCategories.map((name, index) => ({ id: index + 1, name, created_at: "" }))]
+        setCategories(allCategories)
+      }
     } catch (error) {
-      console.error("Error fetching courses:", error)
+      console.error("Error fetching data:", error)
     } finally {
       setLoading(false)
     }
@@ -69,8 +98,6 @@ export default function Home() {
     setFilteredCourses(filtered)
   }
 
-  const categories = ["All", ...Array.from(new Set(courses.map((c) => c.category)))]
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
       {/* Header Navigation */}
@@ -78,7 +105,16 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-4">
             <Link href="/">
-              <h1 className="text-2xl font-bold text-slate-900 cursor-pointer">Fusionlink Solutions Academy</h1>
+              <div className="flex items-center gap-2">
+                <img
+                  src="/ffsl.png"
+                  alt="Fusionlink Solutions Logo"
+                  className="w-10 h-10 object-contain"
+                />
+                <h1 className="text-2xl font-bold text-slate-900 cursor-pointer hidden sm:block">
+                  Fusionlink Solutions Academy
+                </h1>
+              </div>
             </Link>
           </div>
           <div className="flex gap-2 flex-wrap justify-center">
@@ -125,15 +161,15 @@ export default function Home() {
         <div className="flex gap-2 flex-wrap justify-center">
           {categories.map((category) => (
             <button
-              key={category}
-              onClick={() => setSelectedCategory(category)}
+              key={category.id}
+              onClick={() => setSelectedCategory(category.name)}
               className={`px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base rounded-full font-medium transition whitespace-nowrap ${
-                selectedCategory === category
+                selectedCategory === category.name
                   ? "bg-yellow-500 text-white"
                   : "bg-slate-200 text-slate-700 hover:bg-slate-300"
               }`}
             >
-              {category}
+              {category.name}
             </button>
           ))}
         </div>
