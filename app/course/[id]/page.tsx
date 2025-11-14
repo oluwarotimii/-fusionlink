@@ -33,8 +33,7 @@ interface Review {
   comment: string
 }
 
-export default function CourseDetail({ params: awaitedParams }: { params: Promise<{ id: string }> }) {
-  const params = use(awaitedParams);
+export default function CourseDetail({ params }: { params: { id: string } }) {
   const [course, setCourse] = useState<Course | null>(null)
   const [reviews, setReviews] = useState<Review[]>([])
   const [loading, setLoading] = useState(true)
