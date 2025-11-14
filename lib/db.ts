@@ -1,21 +1,12 @@
-import { neon } from "@neondatabase/serverless"
+import "win-ca"; // VERY IMPORTANT for Windows + Neon
+import { neon } from "@neondatabase/serverless";
 
 if (!process.env.DATABASE_URL) {
-  throw new Error("DATABASE_URL environment variable is not set")
+  throw new Error("DATABASE_URL is missing");
 }
 
-const sql = neon(process.env.DATABASE_URL)
+const sql = neon(process.env.DATABASE_URL, {
+  insecureTLS: true, // still required until Node fully trusts the new CA store
+});
 
-export { sql }
-
-export async function testConnection() {
-  try {
-    console.log("Testing database connection...")
-    const result = await sql("SELECT 1 as connection_test")
-    console.log("Database connection successful:", result)
-    return true
-  } catch (error) {
-    console.error("Database connection failed:", error)
-    return false
-  }
-}
+export { sql };
