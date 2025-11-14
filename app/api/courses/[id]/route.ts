@@ -3,7 +3,7 @@ import { sql } from "@/lib/db";
 export async function GET(request: Request, { params: awaitedParams }: { params: Promise<{ id: string }> }) {
   try {
     const params = await awaitedParams;
-    console.log("Fetching course:", params.id)
+    console.log("Fetching course by ID:", params.id)
 
     // Validate that the ID is a number
     const courseId = Number.parseInt(params.id, 10);
