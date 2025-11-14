@@ -128,15 +128,15 @@ export default function CategoriesManager() {
                   required
                 />
                 <div className="flex justify-end gap-2">
-                  <Button 
-                    type="button" 
-                    variant="outline" 
+                  <Button
+                    type="button"
+                    variant="outline"
                     onClick={() => setShowCreateDialog(false)}
                   >
                     Cancel
                   </Button>
-                  <Button 
-                    type="submit" 
+                  <Button
+                    type="submit"
                     className="bg-teal-500 hover:bg-teal-600 text-white"
                     disabled={creating}
                   >
@@ -156,20 +156,20 @@ export default function CategoriesManager() {
           </div>
         )}
 
-        {categories.length === 0 ? (
-          <Card className="p-12 text-center">
-            <p className="text-slate-600 mb-4">No categories found</p>
-            <Button 
-              variant="outline" 
-              onClick={() => setShowCreateDialog(true)}
-              className="bg-teal-500 hover:bg-teal-600 text-white"
-            >
-              Create First Category
-            </Button>
-          </Card>
-        ) : (
-          <div className="overflow-x-auto">
-            <Card className="overflow-hidden min-w-full sm:min-w-0">
+        <Card className="p-6">
+          {categories.length === 0 ? (
+            <div className="p-12 text-center">
+              <p className="text-slate-600 mb-4">No categories found</p>
+              <Button
+                variant="outline"
+                onClick={() => setShowCreateDialog(true)}
+                className="bg-teal-500 hover:bg-teal-600 text-white"
+              >
+                Create First Category
+              </Button>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-slate-100 border-b">
                   <tr>
@@ -199,11 +199,9 @@ export default function CategoriesManager() {
                   ))}
                 </tbody>
               </table>
-            </Card>
-          </div>
-        )}
-        )}
-      </div>
+            </div>
+          )}
+        </Card>
     </div>
   );
 }

@@ -119,69 +119,69 @@ export default function AdminSettingsPage() {
 
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Card className="p-6">
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {error && <div className="bg-red-100 text-red-700 p-4 rounded">{error}</div>}
-          {success && <div className="bg-green-100 text-green-700 p-4 rounded">{success}</div>}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {error && <div className="bg-red-100 text-red-700 p-4 rounded">{error}</div>}
+            {success && <div className="bg-green-100 text-green-700 p-4 rounded">{success}</div>}
 
-          <div>
-            <Label htmlFor="bank_name">Bank Name</Label>
-            <Input
-              id="bank_name"
-              name="bank_name"
-              value={bankDetails.bank_name}
-              onChange={handleChange}
-              placeholder="e.g., First Bank of Nigeria"
-            />
-          </div>
-          <div>
-            <Label htmlFor="account_number">Account Number</Label>
-            <Input
-              id="account_number"
-              name="account_number"
-              value={bankDetails.account_number}
-              onChange={handleChange}
-              placeholder="e.g., 1234567890"
-            />
-          </div>
-          <div>
-            <Label htmlFor="transfer_instructions">Transfer Instructions</Label>
-            <Textarea
-              id="transfer_instructions"
-              name="transfer_instructions"
-              value={bankDetails.transfer_instructions}
-              onChange={handleChange}
-              placeholder="e.g., Please include your course title in the transfer description."
-              rows={5}
-            />
-          </div>
-
-          <div className="space-y-4 pt-4 border-t">
-            <h2 className="text-xl font-bold text-slate-900">WhatsApp Settings</h2>
             <div>
-              <Label htmlFor="whatsapp_number">WhatsApp Number</Label>
+              <Label htmlFor="bank_name">Bank Name</Label>
               <Input
-                id="whatsapp_number"
-                name="whatsapp_number"
-                value={bankDetails.whatsapp_number}
+                id="bank_name"
+                name="bank_name"
+                value={bankDetails.bank_name}
                 onChange={handleChange}
-                placeholder="e.g., +2348012345678"
+                placeholder="e.g., First Bank of Nigeria"
               />
             </div>
-            <div className="flex items-center justify-between">
-              <Label htmlFor="whatsapp_enabled">Enable WhatsApp Button</Label>
-              <Switch
-                id="whatsapp_enabled"
-                checked={bankDetails.whatsapp_enabled}
-                onCheckedChange={handleSwitchChange}
+            <div>
+              <Label htmlFor="account_number">Account Number</Label>
+              <Input
+                id="account_number"
+                name="account_number"
+                value={bankDetails.account_number}
+                onChange={handleChange}
+                placeholder="e.g., 1234567890"
               />
             </div>
-          </div>
+            <div>
+              <Label htmlFor="transfer_instructions">Transfer Instructions</Label>
+              <Textarea
+                id="transfer_instructions"
+                name="transfer_instructions"
+                value={bankDetails.transfer_instructions}
+                onChange={handleChange}
+                placeholder="e.g., Please include your course title in the transfer description."
+                rows={5}
+              />
+            </div>
 
-          <Button type="submit" disabled={saving} className="bg-yellow-500 hover:bg-yellow-600 text-white">
-            {saving ? "Saving..." : "Save Bank Details"}
-          </Button>
-        </form>
-      </Card>
+            <div className="space-y-4 pt-4 border-t">
+              <h2 className="text-xl font-bold text-slate-900">WhatsApp Settings</h2>
+              <div>
+                <Label htmlFor="whatsapp_number">WhatsApp Number</Label>
+                <Input
+                  id="whatsapp_number"
+                  name="whatsapp_number"
+                  value={bankDetails.whatsapp_number}
+                  onChange={handleChange}
+                  placeholder="e.g., +2348012345678"
+                />
+              </div>
+              <div className="flex items-center justify-between">
+                <Label htmlFor="whatsapp_enabled">Enable WhatsApp Button</Label>
+                <Switch
+                  id="whatsapp_enabled"
+                  checked={bankDetails.whatsapp_enabled}
+                  onCheckedChange={handleSwitchChange}
+                />
+              </div>
+            </div>
+
+            <Button type="submit" disabled={saving} className="bg-yellow-500 hover:bg-yellow-600 text-white">
+              {saving ? "Saving..." : "Save Bank Details"}
+            </Button>
+          </form>
+        </Card>
     </div>
-  )
+  );
 }
